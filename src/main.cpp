@@ -1,4 +1,5 @@
 #include "game.h"
+#include "headers.h"
 
 int main(int argc, char ** argv){
     PacManGR game;

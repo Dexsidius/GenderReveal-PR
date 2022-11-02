@@ -27,10 +27,10 @@ void Framebuffer::UnsetBuffers(){
     SDL_SetRenderTarget(renderer, NULL);
 }
 
-int Framebuffer::RenderBuffer(string name, int x, int y, int w, int h, SDL_RendererFlip flip){
+int Framebuffer::RenderBuffer(string name, int x, int y, int w, int h){
     d_rect = {(x - (w/2)), (y - (h/2)), w, h};
     if (buffers.find(name) != buffers.end()){
-        SDL_RenderCopyEx(renderer, buffers[name], NULL, &d_rect, NULL, NULL, flip);
+        SDL_RenderCopyEx(renderer, buffers[name], NULL, &d_rect, NULL, NULL, SDL_FLIP_NONE);
         return 1;
     }
     return 0;

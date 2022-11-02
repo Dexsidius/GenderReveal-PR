@@ -21,4 +21,4 @@ class MouseManager {
 
         void Render(SDL_Renderer * renderer);
 
-}
+};

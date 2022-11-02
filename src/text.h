@@ -13,4 +13,4 @@ class TextCache {
         ~TextCache();
         void SetFont(string font, string location = "resources/font/");
         int RenderText(string text, int x, int y, int size, SDL_Color color = {0, 0, 0, 255}, int offset = 5);
-}
+};

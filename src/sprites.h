@@ -3,7 +3,7 @@
 
 class SpriteCache{
     private:
-        map<string, SDL_Texture *> textures = {};
+        map<string, SDL_Texture *> textures ;
 
     public: 
         SDL_Renderer * renderer;
@@ -12,7 +12,7 @@ class SpriteCache{
         SDL_Texture * LoadTexture(string);
         ~SpriteCache();
 
-}
+};
 
 class Sprite {
     protected:
@@ -26,17 +26,17 @@ class Sprite {
         int x, y;
         double angle;
         bool source_rectangle = true;
-        int starting_s_x, starting_s_x;
+        int starting_s_x, starting_s_y;
 
         bool finished = false;
-        Sprite(SpriteCache * cache, SDL_Rect s, SDL_Rect d, string filepath, double angle = 0, SDL_RendererFlip flip = SDL_FLIP_NONE);
+        Sprite(SpriteCache * cache, SDL_Rect s, SDL_Rect d, string filepath, double angle = 0);
         void SetPos(int xpos, int ypos);
         void SetDestinationR(SDL_Rect * r);
         virtual void Animate(Clock * clock);
         virtual void Reset();
         void Render();
         virtual ~Sprite();
-}
+};
 
 class AnimatedSprite : public Sprite {
 private:

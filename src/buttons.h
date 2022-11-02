@@ -1,10 +1,10 @@
 #pragma once
 #include "headers.h"
 
-class Pellets{
+class Button {
     private:
-
+        
 
     public:
-
+        string text;
 };
