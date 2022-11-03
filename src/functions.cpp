@@ -20,7 +20,7 @@ vector<string> split(string const & word, char delim){
     return strings;
 }
 
-LevelScene * CreateScene(SpriteCache * cache,Framebuffer * framebuffer, TextCache * text_cache,Player * player, string filepath, SDL_RendererFlip * flip){
+LevelScene * CreateScene(SpriteCache * cache,Framebuffer * framebuffer, TextCache * text_cache,Player * player, string filepath){
     LevelScene * scene = new LevelScene(cache->renderer,framebuffer ,cache, text_cache);
     ifstream level_file(filepath.c_str());
     string line;

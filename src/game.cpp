@@ -27,19 +27,19 @@ int PacManGR::Start(int argc, char ** argv){
     srand(time(NULL));
 
     // Start Clock
-    //clock = Clock();
+    clock = Clock();
 
-    //mouse = new MouseManager();
-    //keyboard = new KeyboardManager();
-    //framebuffer = new Framebuffer(window, renderer);
-    //text = new TextCache(renderer);
-    //cache = new SpriteCache(renderer);
-    //p1 = new Player(cache, 0, 0, 32, 32, "resources/pacman_sprites.png");
+    mouse = new MouseManager();
+    keyboard = new KeyboardManager();
+    framebuffer = new Framebuffer(window, renderer);
+    text = new TextCache(renderer);
+    cache = new SpriteCache(renderer);
+    p1 = new Player(cache, 0, 0, 32, 32, "resources/pacman_sprites.png");
 
-    //text->SetFont("joystix.tff");
+    text->SetFont("joystix.tff");
 
-    //menu = new MenuScene(cache, framebuffer, text, p1);
-    //game_scene = nullptr;
+    menu = new MenuScene(cache, framebuffer, text, p1);
+    game_scene = nullptr;
 
     running = true;
     return 1;
@@ -54,17 +54,35 @@ void PacManGR::Loop(){
 
 void PacManGR::Process(){
     //TODO: Clock tick
+    clock.Tick();
 
 
     //TODO: Keyboard and Mouse
+    keyboard->Process();
+    mouse->Process();
+
+    if (keyboard>KeyIsPressed(SDL_SCANCODE_ESCAPE)){
+        running = false;
+    }
 
     //Event Loop
     while (SDL_PollEvent(&event)){
-        //mouse->GetPositionEvent(&event);
+        mouse->GetPositionEvent(&event);
         if(event.type == SDL_QUIT){
             running = false;
             break;
         }
+    }
+
+    if (state == "MENU"){
+        if (menu->Process(&clock, mouse, &state, &scene_path)){
+            delete game_scene;
+            game_scene = CreateScene(cache, framebuffer, text, p1, scene_path);
+        }
+    }
+
+    if (state == "GAME"){
+        game_scene->Process(&clock, keyboard, mouse, &state, GAME_WIDTH, GAME_HEIGHT);
     }
 
 }
@@ -73,8 +91,25 @@ void PacManGR::Render(){
     if (running){
         //Render Scale
         SDL_RenderSetLogicalSize(renderer, WIDTH, HEIGHT);
+
+        if (state == "MENU"){
+            menu->RenderScene();
+        }
+
+        if (state == "GAME"){
+            game_scene->RenderScene();
+        }
+
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
+
+        if (state == "MENU"){
+            framebuffer->RenderBuffer("MENU", WIDTH/2, HEIGHT/2, WIDTH, HEIGHT);
+        }
+        if (state == "GAME"){
+            framebuffer->RenderBuffer("GAME", WIDTH/2, HEIGHT/2, WIDTH, HEIGHT);
+        }
+        
         SDL_RenderPresent(renderer);
         
     }

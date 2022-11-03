@@ -19,6 +19,8 @@ private:
     int GAME_WIDTH = 800, GAME_HEIGHT = 600;
     Uint32 WINDOW_FLAGS = SDL_WINDOW_SHOWN;
     Uint32 RENDERER_FLAGS = SDL_RENDERER_PRESENTVSYNC;
+    string state = "MENU";
+    string scene_path = "";
 
     //Private Objects
 
@@ -32,6 +34,7 @@ private:
     MouseManager * mouse;
     Framebuffer * framebuffer;
     TextCache * text;
+    
 
     //Private Functions
     void Process();
@@ -40,6 +43,7 @@ public:
     //Variables
     bool running = false;
     int current_width = WIDTH, current_height = HEIGHT;
+    string game_scene;
     PacManGR();
 
     int Start(int argc, char ** argv);
