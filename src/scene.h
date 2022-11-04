@@ -15,14 +15,16 @@ class LevelScene {
         Framebuffer * framebuffer;
         SDL_Renderer * renderer;
         TextCache * text_renderer;
+        
 
         
     public:
         bool paused;
         bool finished;
         bool starting;
-        LevelScene(SDL_Renderer * r, Framebuffer * framebuffer, SpriteCache *, TextCache *);
-        void Process(Clock *, KeyboardManager *, MouseManager, string *, int, int);
+        bool running;
+        LevelScene(SDL_Renderer *, Framebuffer *, SpriteCache *, TextCache *);
+        void Process(Clock *, KeyboardManager *, MouseManager *, string *, int, int);
         void RenderScene();
         ~LevelScene();
         void AddEnemy();
@@ -32,7 +34,7 @@ class LevelScene {
 class MenuScene {
     private:
         Player * player;
-        SDL_Renderer * flip;
+        SDL_Renderer * renderer;
         SpriteCache * cache;
         Framebuffer * framebuffer;
         map<string, Button *> buttons;

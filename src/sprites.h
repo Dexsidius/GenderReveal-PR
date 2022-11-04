@@ -22,20 +22,18 @@ class Sprite {
     public:
         SDL_Rect d_rect;
         SDL_Renderer * renderer;
-        SDL_RendererFlip flip;
         int x, y;
-        double angle;
         bool source_rectangle = true;
         int starting_s_x, starting_s_y;
 
         bool finished = false;
-        Sprite(SpriteCache * cache, SDL_Rect s, SDL_Rect d, string filepath, double angle = 0);
+        Sprite(SpriteCache * cache, SDL_Rect s, SDL_Rect d, string filepath);
         void SetPos(int xpos, int ypos);
         void SetDestinationR(SDL_Rect * r);
         virtual void Animate(Clock * clock);
         virtual void Reset();
         void Render();
-        virtual ~Sprite();
+        ~Sprite();
 };
 
 class AnimatedSprite : public Sprite {
@@ -48,7 +46,7 @@ private:
 
 public:
    
-    AnimatedSprite(SpriteCache * cache, SDL_Rect s, SDL_Rect d, string filepath, int frame_offset, int number_of_frames, double update_time, double angle = 0, SDL_RendererFlip flip = SDL_FLIP_NONE);
+    AnimatedSprite(SpriteCache * cache, SDL_Rect s, SDL_Rect d, string filepath, int frame_offset, int number_of_frames, double update_time);
     void Animate(Clock * clock);
     void Reset();
 };

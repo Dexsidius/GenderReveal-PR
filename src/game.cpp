@@ -41,6 +41,9 @@ int PacManGR::Start(int argc, char ** argv){
     menu = new MenuScene(cache, framebuffer, text, p1);
     game_scene = nullptr;
 
+    framebuffer->CreateBuffer("MENU", WIDTH, HEIGHT);
+    framebuffer->CreateBuffer("GAME", GAME_WIDTH, GAME_HEIGHT);
+
     running = true;
     return 1;
 }
@@ -61,7 +64,7 @@ void PacManGR::Process(){
     keyboard->Process();
     mouse->Process();
 
-    if (keyboard>KeyIsPressed(SDL_SCANCODE_ESCAPE)){
+    if (keyboard->KeyIsPressed(SDL_SCANCODE_ESCAPE)){
         running = false;
     }
 
@@ -109,7 +112,7 @@ void PacManGR::Render(){
         if (state == "GAME"){
             framebuffer->RenderBuffer("GAME", WIDTH/2, HEIGHT/2, WIDTH, HEIGHT);
         }
-        
+
         SDL_RenderPresent(renderer);
         
     }

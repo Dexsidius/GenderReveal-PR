@@ -43,7 +43,6 @@ public:
     //Variables
     bool running = false;
     int current_width = WIDTH, current_height = HEIGHT;
-    string game_scene;
     PacManGR();
 
     int Start(int argc, char ** argv);

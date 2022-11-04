@@ -7,10 +7,13 @@ class MouseManager {
         bool clicked;
     
     public:
+
+        // Variables
         int x_pos, y_pos;
         bool clicking;
         bool has_clicked;
 
+        // Functions
         MouseManager();
         void Process();
         void GetPositionEvent(SDL_Event *);

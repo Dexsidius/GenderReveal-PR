@@ -20,6 +20,9 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
     
 }
 
+LevelScene::~LevelScene(){}
+
+
 void LevelScene::RenderScene(){}
 
 MenuScene::MenuScene(SpriteCache * cache, Framebuffer * framebuffer, TextCache * text, Player * player){}
@@ -28,5 +31,12 @@ MenuScene::~MenuScene(){}
 
 bool MenuScene::Process(Clock * clock, MouseManager * mouse, string * state, string * path){}
 
-void MenuScene::RenderScene(){}
+void MenuScene::RenderScene(){
+    //Rendering
+    framebuffer->SetActiveBuffer("MENU");
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+
+    framebuffer->UnsetBuffers();
+}
 
