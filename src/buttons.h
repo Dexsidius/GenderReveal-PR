@@ -13,11 +13,11 @@ class Button {
         double x_pos;
         double y_pos;
 
-        Button(int x, int y, int w, int h, SpriteCache * cache);
+        Button(int x, int y, int w, int h);
         virtual ~Button();
 
         virtual bool MouseTouching(MouseManager * mouse);
         virtual bool MouseClicking(MouseManager * mouse);
-        virtual void Prcess(Clock * clock);
+        virtual void Process(Clock * clock, MouseManager * mouse);
         virtual void Render();
 };
