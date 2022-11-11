@@ -1,6 +1,9 @@
 #pragma once
 #include "headers.h"
 
+#ifndef mousemanager_h
+#define mousemanager_h
+
 class MouseManager {
     private: 
         SDL_Rect mouse_rect;
@@ -25,3 +28,5 @@ class MouseManager {
         void Render(SDL_Renderer * renderer);
 
 };
+
+#endif

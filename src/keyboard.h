@@ -1,6 +1,9 @@
 #pragma once
 #include "headers.h"
 
+#ifndef keyboard_h
+#define keyboard_h
+
 class KeyboardManager {
     private:
         // Variables
@@ -16,3 +19,5 @@ class KeyboardManager {
         bool KeyIsPressed(int scancode);
         bool KeyWasPressed(int scancode);
 };
+
+#endif

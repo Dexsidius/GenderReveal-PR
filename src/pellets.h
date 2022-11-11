@@ -8,3 +8,7 @@ class Pellets{
     public:
 
 };
+
+class BigPellet : public Pellets{
+
+};

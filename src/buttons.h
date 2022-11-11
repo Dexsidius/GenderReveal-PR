@@ -1,5 +1,9 @@
 #pragma once
 #include "headers.h"
+#include "sprites.h"
+
+#ifndef buttons_h
+#define buttons_h
 
 class Button {
     protected:
@@ -13,7 +17,7 @@ class Button {
         double x_pos;
         double y_pos;
 
-        Button(int x, int y, int w, int h);
+        Button(int x, int y, int w, int h, SpriteCache * cache);
         virtual ~Button();
 
         virtual bool MouseTouching(MouseManager * mouse);
@@ -21,3 +25,17 @@ class Button {
         virtual void Process(Clock * clock, MouseManager * mouse);
         virtual void Render();
 };
+
+class SpriteButton : public Button{
+    private:
+        map<string, Sprite *> sprites;
+        bool is_touched;
+
+    public:
+        SpriteButton(SpriteCache * cache, string filepath, int x, int y, int w, int h, SDL_Rect src, int frames = 1, int offset = 0, double update_time = 0);
+        void Process(Clock * clock);
+        bool MouseTouching(MouseManager * mouse);
+        void Render();
+};
+
+#endif

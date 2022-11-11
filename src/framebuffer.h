@@ -1,6 +1,8 @@
 #pragma once
 #include "headers.h"
 
+#ifndef framebuffer_h
+#define framebuffer_h
 
 class Framebuffer {
     private:
@@ -20,3 +22,5 @@ class Framebuffer {
         int RenderBuffer(string name, int x, int y, int w, int h);
 
 };
+
+#endif

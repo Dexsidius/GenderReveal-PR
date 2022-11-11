@@ -1,6 +1,9 @@
 #pragma once
 #include "headers.h"
 
+#ifndef clock_h
+#define clock_h
+
 class Clock {
     private:
         uint32_t last_time;
@@ -13,3 +16,5 @@ class Clock {
         void Tick();
         ~Clock();
 };
+
+#endif
