@@ -20,11 +20,7 @@ bool Button::MouseClicking(MouseManager * mouse){
     return MouseTouching(mouse) && mouse->IsClicking(&area);
 }
 
-void Button::Process(Clock * clock, MouseManager * mouse){
-    if (MouseTouching(mouse)){
-        this->highlight = true;
-    }
-}
+void Button::Process(Clock * clock){}
 
 void Button::Render(){}
 

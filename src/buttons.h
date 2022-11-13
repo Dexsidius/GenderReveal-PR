@@ -22,7 +22,7 @@ class Button {
 
         virtual bool MouseTouching(MouseManager * mouse);
         virtual bool MouseClicking(MouseManager * mouse);
-        virtual void Process(Clock * clock, MouseManager * mouse);
+        virtual void Process(Clock * clock);
         virtual void Render();
 };
 

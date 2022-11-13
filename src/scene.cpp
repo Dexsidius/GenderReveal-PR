@@ -35,8 +35,8 @@ MenuScene::MenuScene(SpriteCache * cache, Framebuffer * framebuffer, TextCache *
     text_cache = text;
     this->player = player;
 
-    buttons["play"] = new SpriteButton(cache, "resources/play_quit.bmp", 640, 360, 32, 48, {0, 0, 32, 24}, 7, 24, .06);
-    buttons["quit"] = new SpriteButton(cache, "resources/play_quit.bmp", 640, 560, 32, 48, {0, 48, 32, 24}, 7, 24, .06);
+    buttons["play"] = new SpriteButton(cache, "resources/play_quit.bmp", 640, 360, 64, 24, {0, 0, 64, 24}, 7, 0, .06);
+    buttons["quit"] = new SpriteButton(cache, "resources/play_quit.bmp", 640, 460, 64, 24, {0, 48, 64, 24}, 7, 0, .06);
 }
 
 MenuScene::~MenuScene(){}
@@ -44,7 +44,7 @@ MenuScene::~MenuScene(){}
 bool MenuScene::Process(Clock * clock, MouseManager * mouse, string * state, string * path){
 
     for (auto const &button : buttons){
-        
+        button.second->Process(clock);
     }
 
     return 0;

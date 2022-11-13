@@ -7,4 +7,8 @@ int main(int argc, char ** argv){
     if (!game.Start(argc, argv)){
         return -1;
     }
+
+    game.Loop();
+
+    return 0;
 }

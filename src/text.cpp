@@ -43,6 +43,7 @@ int TextCache::RenderText(string text, int x, int y, int size, SDL_Color color, 
 }
 
 TextCache::~TextCache(){
+    
     for (const auto &saved : characters){
         for (const auto &character : saved.second){
             SDL_DestroyTexture(character.second);

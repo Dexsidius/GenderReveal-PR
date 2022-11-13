@@ -3,9 +3,14 @@
 PacManGR::PacManGR(){};
 
 int PacManGR::Start(int argc, char ** argv){
-    SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO);
+    SDL_Init(SDL_INIT_VIDEO);
+    TTF_Init();
 
+    atexit(TTF_Quit);
     atexit(SDL_Quit);
+
+    
+    
     
     // Creating Window..
     window = SDL_CreateWindow("PacMan Gender Reveal - Dexsidius", SDL_WINDOWPOS_UNDEFINED,
@@ -27,7 +32,7 @@ int PacManGR::Start(int argc, char ** argv){
     srand(time(NULL));
 
     event = SDL_Event();
-    
+
     // Start Clock
     clock = Clock();
 
@@ -38,8 +43,7 @@ int PacManGR::Start(int argc, char ** argv){
     cache = new SpriteCache(renderer);
     p1 = new Player(cache, 0, 0, 32, 32, "resources/pacman_sprites.png");
 
-    text->SetFont("joystix.tff");
-
+    text->SetFont("joystix.ttf");
     menu = new MenuScene(cache, framebuffer, text, p1);
     game_scene = nullptr;
 
@@ -80,6 +84,7 @@ void PacManGR::Process(){
             running = false;
             break;
         }
+        
     }
 
     if (state == "MENU"){
@@ -126,9 +131,11 @@ void PacManGR::Render(){
 PacManGR::~PacManGR(){
     delete p1;
     delete cache;
+    delete text;
     delete framebuffer;
     delete mouse;
     delete keyboard;
+    
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 
