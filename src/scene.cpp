@@ -25,17 +25,42 @@ LevelScene::~LevelScene(){}
 
 void LevelScene::RenderScene(){}
 
-MenuScene::MenuScene(SpriteCache * cache, Framebuffer * framebuffer, TextCache * text, Player * player){}
+MenuScene::MenuScene(SpriteCache * cache, Framebuffer * framebuffer, TextCache * text, Player * player){
+    this->framebuffer = framebuffer;
+    this->cache = cache;
+    starting = true;
+    running = false;
+    finished = false;
+    renderer = cache->renderer;
+    text_cache = text;
+    this->player = player;
+
+    buttons["play"] = new SpriteButton(cache, "resources/play_quit.bmp", 640, 360, 32, 48, {0, 0, 32, 24}, 7, 24, .06);
+    buttons["quit"] = new SpriteButton(cache, "resources/play_quit.bmp", 640, 560, 32, 48, {0, 48, 32, 24}, 7, 24, .06);
+}
 
 MenuScene::~MenuScene(){}
 
-bool MenuScene::Process(Clock * clock, MouseManager * mouse, string * state, string * path){}
+bool MenuScene::Process(Clock * clock, MouseManager * mouse, string * state, string * path){
+
+    for (auto const &button : buttons){
+        
+    }
+
+    return 0;
+}
 
 void MenuScene::RenderScene(){
     //Rendering
     framebuffer->SetActiveBuffer("MENU");
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
+
+    for (auto const &button : buttons){
+        button.second->Render();
+    }
+
+    
 
     framebuffer->UnsetBuffers();
 }

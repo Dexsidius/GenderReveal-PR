@@ -26,6 +26,8 @@ int PacManGR::Start(int argc, char ** argv){
     // Initialize random seed
     srand(time(NULL));
 
+    event = SDL_Event();
+    
     // Start Clock
     clock = Clock();
 
@@ -50,9 +52,12 @@ int PacManGR::Start(int argc, char ** argv){
 
 void PacManGR::Loop(){
 
-    Process();
-    Render();
-    SDL_Delay(5);
+    while(running){
+
+        Process();
+        Render();
+        SDL_Delay(5);
+    }
 }
 
 void PacManGR::Process(){
@@ -119,11 +124,11 @@ void PacManGR::Render(){
 }
 
 PacManGR::~PacManGR(){
-    //delete p1;
-    //delete cache;
-    //delete framebuffer;
-    //delete mouse;
-    //delete keyboard;
+    delete p1;
+    delete cache;
+    delete framebuffer;
+    delete mouse;
+    delete keyboard;
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 

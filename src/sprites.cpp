@@ -9,7 +9,7 @@ SDL_Texture * SpriteCache::LoadTexture(string filepath){
     if (textures.find(filepath) == textures.end()) {
         SDL_Surface * surface = SDL_LoadBMP(filepath.c_str());
         if (!surface){
-            ShowError("Space Inversion Error!", (filepath + " not found!, can't load!"), "file not loaded", false);
+            ShowError("PacMan:GR Edition Error", (filepath + " not found!, can't load!"), "file not loaded", false);
         }
         textures[filepath] = SDL_CreateTextureFromSurface(renderer, surface);
         SDL_FreeSurface(surface);

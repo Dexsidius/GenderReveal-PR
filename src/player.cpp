@@ -11,3 +11,5 @@ void Player::Reset(){}
 void Player::Move(string d){}
 
 void Player::SetPos(int x, int y){}
+
+Player::~Player(){};
