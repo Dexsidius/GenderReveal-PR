@@ -21,6 +21,7 @@ private:
     Uint32 RENDERER_FLAGS = SDL_RENDERER_PRESENTVSYNC;
     string state = "MENU";
     string scene_path = "";
+    string gender = "";
 
     //Private Objects
 

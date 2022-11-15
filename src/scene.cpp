@@ -20,6 +20,7 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
     
 }
 
+
 LevelScene::~LevelScene(){}
 
 
@@ -35,18 +36,70 @@ MenuScene::MenuScene(SpriteCache * cache, Framebuffer * framebuffer, TextCache *
     text_cache = text;
     this->player = player;
 
-    buttons["play"] = new SpriteButton(cache, "resources/play_quit.bmp", 640, 360, 64, 24, {0, 0, 64, 24}, 7, 0, .06);
-    buttons["quit"] = new SpriteButton(cache, "resources/play_quit.bmp", 640, 460, 64, 24, {0, 48, 64, 24}, 7, 0, .06);
+    buttons["play"] = new SpriteButton(cache, "resources/play.bmp", 640, 360, 96, 64, {0, 0, 48, 32}, 2, 48, .06);
+    buttons["quit"] = new SpriteButton(cache, "resources/quit.bmp", 640, 450, 96, 64, {0, 0, 48, 32}, 2, 48, .06);
+    gender_options["boy"] = new SpriteButton(cache, "resources/boy.bmp", 400, 300, 96, 48, {0, 0, 64, 24}, 2, 64, .08);
+    gender_options["girl"] = new SpriteButton(cache, "resources/girl.bmp", 900, 300, 96, 48, {0, 0, 64, 24}, 2, 64, .08);
+    
+
+    animate_interval = 1.2;
 }
 
 MenuScene::~MenuScene(){}
 
 bool MenuScene::Process(Clock * clock, MouseManager * mouse, string * state, string * path){
-
-    for (auto const &button : buttons){
-        button.second->Process(clock);
+    if (starting){
+        running = true;
     }
+    if (running){
+        seconds_passed += clock->delta_time_s;
 
+        
+
+        if (select_newgame){
+            for (auto const &options : gender_options){
+                if (select_newgame){
+                    options.second->Process(clock);
+            }
+        }
+            if (gender_options["boy"]->MouseClicking(mouse)){
+                its_boy = true;
+                its_girl = false;
+                
+                *state = "GAME";
+                *path = "resources/level/gr-1.mx";
+                return 1;
+                
+
+            }else if (gender_options["girl"]->MouseClicking(mouse)){
+                its_girl = true;
+                its_boy = false;
+                
+                *state = "GAME";
+                *path = "resources/level/gr-1.mx";
+                return 1;
+                
+            }
+
+        }
+        
+        if (!select_newgame){
+            for (auto const &button : buttons){
+                button.second->Process(clock);
+                if (buttons["play"]->MouseClicking(mouse)){
+                    select_newgame = true;
+                }
+
+                if (buttons["quit"]->MouseClicking(mouse)){
+                    running = false;
+                    starting = false;
+                }
+            }
+        }
+
+
+    }
+    
     return 0;
 }
 
@@ -56,9 +109,21 @@ void MenuScene::RenderScene(){
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
+
+    
+
     for (auto const &button : buttons){
+        
         button.second->Render();
     }
+
+    for (auto const &options : gender_options){
+        if (select_newgame){
+            options.second->Render();
+        }
+    }
+
+    
 
     
 

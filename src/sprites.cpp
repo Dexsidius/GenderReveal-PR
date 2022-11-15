@@ -59,6 +59,8 @@ void Sprite::Render(){
 
     if (source_rectangle){
         SDL_RenderCopy(renderer, texture, &s_rect, &d_rect);
+    }else{
+        SDL_RenderCopy(renderer, texture, NULL, &d_rect);
     }
 }
 

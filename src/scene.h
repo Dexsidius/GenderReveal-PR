@@ -16,6 +16,7 @@ class LevelScene {
         SDL_Renderer * renderer;
         TextCache * text_renderer;
         
+        
 
         
     public:
@@ -23,6 +24,8 @@ class LevelScene {
         bool finished;
         bool starting;
         bool running;
+
+
         LevelScene(SDL_Renderer *, Framebuffer *, SpriteCache *, TextCache *);
         void Process(Clock *, KeyboardManager *, MouseManager *, string *, int, int);
         void RenderScene();
@@ -38,12 +41,19 @@ class MenuScene {
         SpriteCache * cache;
         Framebuffer * framebuffer;
         map<string, Button *> buttons;
+        map<string, Button *> gender_options;
         TextCache * text_cache;
+
+        double animate_interval = 0.0;
+        double seconds_passed = 0.0;
 
         // Menu Conditions open/close
         bool select_newgame = false;
+
+        // Gender Reveal Conditions
         bool its_boy = false;
         bool its_girl = false;
+        
 
 
     public:
