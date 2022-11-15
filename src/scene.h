@@ -27,7 +27,7 @@ class LevelScene {
 
 
         LevelScene(SDL_Renderer *, Framebuffer *, SpriteCache *, TextCache *);
-        void Process(Clock *, KeyboardManager *, MouseManager *, string *, int, int);
+        void Process(Clock *, KeyboardManager *, MouseManager *, string *, int, int, string *);
         void RenderScene();
         ~LevelScene();
         void AddEnemy();
@@ -62,7 +62,7 @@ class MenuScene {
         bool finished;
         MenuScene(SpriteCache *, Framebuffer * framebuffer, TextCache *, Player *);
         ~MenuScene();
-        bool Process(Clock * clock, MouseManager * mouse, string * state, string * scene_path);
+        bool Process(Clock * clock, MouseManager * mouse, string * state, string * scene_path, string * gender);
         void RenderScene();
 
 };

@@ -88,14 +88,14 @@ void PacManGR::Process(){
     }
 
     if (state == "MENU"){
-        if (menu->Process(&clock, mouse, &state, &scene_path)){
+        if (menu->Process(&clock, mouse, &state, &scene_path, &gender)){
             delete game_scene;
             game_scene = CreateScene(cache, framebuffer, text, p1, scene_path);
         }
     }
 
     if (state == "GAME"){
-        game_scene->Process(&clock, keyboard, mouse, &state, GAME_WIDTH, GAME_HEIGHT);
+        game_scene->Process(&clock, keyboard, mouse, &state, GAME_WIDTH, GAME_HEIGHT, &gender);
     }
 
 }

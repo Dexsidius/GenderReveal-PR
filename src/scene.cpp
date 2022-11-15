@@ -16,7 +16,7 @@ void LevelScene::AddPlayer(Player * pl){
 
 }
 
-void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager * mouse, string * state, int width, int height){
+void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager * mouse, string * state, int width, int height, string * gender){
     
 }
 
@@ -47,7 +47,7 @@ MenuScene::MenuScene(SpriteCache * cache, Framebuffer * framebuffer, TextCache *
 
 MenuScene::~MenuScene(){}
 
-bool MenuScene::Process(Clock * clock, MouseManager * mouse, string * state, string * path){
+bool MenuScene::Process(Clock * clock, MouseManager * mouse, string * state, string * path, string * gender){
     if (starting){
         running = true;
     }
@@ -65,7 +65,7 @@ bool MenuScene::Process(Clock * clock, MouseManager * mouse, string * state, str
             if (gender_options["boy"]->MouseClicking(mouse)){
                 its_boy = true;
                 its_girl = false;
-                
+                *gender = "boy";
                 *state = "GAME";
                 *path = "resources/level/gr-1.mx";
                 return 1;
@@ -74,7 +74,7 @@ bool MenuScene::Process(Clock * clock, MouseManager * mouse, string * state, str
             }else if (gender_options["girl"]->MouseClicking(mouse)){
                 its_girl = true;
                 its_boy = false;
-                
+                *gender = "girl";
                 *state = "GAME";
                 *path = "resources/level/gr-1.mx";
                 return 1;
