@@ -3,7 +3,7 @@
 LevelScene::LevelScene(SDL_Renderer * r, Framebuffer * framebuffer, SpriteCache * sprite_cache, TextCache * text_cache){
     this->framebuffer = framebuffer;
     starting = true;
-    running = false;
+    running = true;  //dont forget to turn this back off.  True only for Testing purposes
     finished = false;
     paused = false;
     renderer = r;
@@ -11,20 +11,58 @@ LevelScene::LevelScene(SDL_Renderer * r, Framebuffer * framebuffer, SpriteCache 
     
 }
 
+
 void LevelScene::AddPlayer(Player * pl){
     player = pl;
 
 }
 
+void LevelScene::Reset(){
+    player->Reset();
+    starting = true;
+    running = false;
+}
+
 void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager * mouse, string * state, int width, int height, string * gender){
+    if (running){
+        if (keyboard->KeyWasPressed(SDL_SCANCODE_P)){
+            if (paused){
+                paused = false;
+            }else {
+                paused = true;
+            }
+        }
+
+        if (!paused){
+            if (keyboard->KeyIsPressed(SDL_SCANCODE_A)){
+                player->Move("left");
+            }
+            else if (keyboard->KeyIsPressed(SDL_SCANCODE_D)){
+                player->Move("right");
+            }
+            else if (keyboard->KeyIsPressed(SDL_SCANCODE_W)){
+                player->Move("up");
+            }
+            else if (keyboard->KeyIsPressed(SDL_SCANCODE_S)){
+                player->Move("down");
+            }
+        }
+        
+    }
     
 }
 
+void LevelScene::AddEnemy(Ghost * ghost){}
 
 LevelScene::~LevelScene(){}
 
 
-void LevelScene::RenderScene(){}
+void LevelScene::RenderScene(){
+    framebuffer->SetActiveBuffer("GAME");
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
+    framebuffer->UnsetBuffers();
+}
 
 MenuScene::MenuScene(SpriteCache * cache, Framebuffer * framebuffer, TextCache * text, Player * player){
     this->framebuffer = framebuffer;
@@ -67,7 +105,7 @@ bool MenuScene::Process(Clock * clock, MouseManager * mouse, string * state, str
                 its_girl = false;
                 *gender = "boy";
                 *state = "GAME";
-                *path = "resources/level/gr-1.mx";
+                *path = "resources/level/pacman_level.mx";
                 return 1;
                 
 
@@ -76,7 +114,7 @@ bool MenuScene::Process(Clock * clock, MouseManager * mouse, string * state, str
                 its_boy = false;
                 *gender = "girl";
                 *state = "GAME";
-                *path = "resources/level/gr-1.mx";
+                *path = "resources/level/pacman_level.mx";
                 return 1;
                 
             }

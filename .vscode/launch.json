@@ -5,21 +5,21 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "launch PacMan GR Edition ( debug )",
+            "name": "launch GenderReveal (debug)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/GenderRevealDEBUG.x86_64",
+            "program": "${workspaceFolder}/bin/GenderReveal.x86_64",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
-            "environment":[],
+            "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "setupCommands":[
+            "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",
                     "text": "-enable-pretty-printing",
-                    "ignoreFailures":true
+                    "ignoreFailures": true
                 }
             ],
             "preLaunchTask": "build (debug)"

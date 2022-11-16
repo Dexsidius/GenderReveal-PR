@@ -11,7 +11,7 @@ class Ghost{
         bool moving;
         string direction;
         int starting_xpos, starting_ypos;
-        SDL * Renderer renderer;
+        SDL_Renderer * renderer;
         SpriteCache * cache;
 
     public:
@@ -28,7 +28,6 @@ class Ghost{
     Player * player;
 
     Ghost(SpriteCache * cache, int x, int y, int w, int h, string src, string t, Player * player);
-    PathingDFS(Player * player, )
 
     virtual void Process(Clock * clock, int height);
     virtual void Move(string d);
@@ -46,18 +45,18 @@ class Pinky : public Ghost {
 };
     
 
-class Blink : public Ghost {
+class Blinky : public Ghost {
     public:
-        Pinky(SpriteCache * cache, int x, int y, int w, int h, string src, string t, Player * player);
+        Blinky(SpriteCache * cache, int x, int y, int w, int h, string src, string t, Player * player);
 };
 
 class Inky : public Ghost {
     public:
-        Pinky(SpriteCache * cache, int x, int y, int w, int h, string src, string t, Player * player);
+        Inky(SpriteCache * cache, int x, int y, int w, int h, string src, string t, Player * player);
 };
 
 class Clyde : public Ghost {
     public:
-        Pinky(SpriteCache * cache, int x, int y, int w, int h, string src, string t, Player * player);
+        Clyde(SpriteCache * cache, int x, int y, int w, int h, string src, string t, Player * player);
 };
 

@@ -5,6 +5,7 @@
 #include "pellets.h"
 #include "buttons.h"
 #include "framebuffer.h"
+#include "enemy.h"
 
 class LevelScene {
     private:
@@ -30,8 +31,9 @@ class LevelScene {
         void Process(Clock *, KeyboardManager *, MouseManager *, string *, int, int, string *);
         void RenderScene();
         ~LevelScene();
-        void AddEnemy();
         void AddPlayer(Player *);
+        void AddEnemy(Ghost * ghost);
+        void Reset();
 };
 
 class MenuScene {
