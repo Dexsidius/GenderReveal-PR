@@ -9,7 +9,7 @@ using namespace std;
 
 //Standard Includes
 #include <iostream>
-#include <string.h>
+#include <string>
 #include <fstream>
 #include <sstream>
 #include <memory>

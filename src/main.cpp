@@ -6,9 +6,11 @@ int main(int argc, char ** argv){
 
     if (!game.Start(argc, argv)){
         return -1;
+    }else{
+        game.Loop();
+
     }
 
-    game.Loop();
 
     return 0;
 }

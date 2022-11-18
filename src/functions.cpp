@@ -30,6 +30,7 @@ LevelScene * CreateScene(SpriteCache * cache,Framebuffer * framebuffer, TextCach
         while (getline(level_file, line)){
 
             vector<string> section = split(line, '|');
+            cout << section[0] << endl;
 
             if (section[0] == "*"){
                 vector<string> subsect = split(section[1], ':');
@@ -55,11 +56,11 @@ LevelScene * CreateScene(SpriteCache * cache,Framebuffer * framebuffer, TextCach
 
                             scene->AddPlayer(player);
                         }
-                        else if (obj_name == "enemy1"){
-                            scene->AddEnemy(new Blinky(cache, x, y, w, h, obj_filepath, "villain1",player));
+                        else if (obj_name == "villain1"){
+                            //scene->AddEnemy(new Villian1(cache, x, y, w, h, obj_filepath, "villain1",player));
                         }
-                        else if (obj_name == "enemy2"){
-                            scene->AddEnemy(new Pinky(cache, x, y, w, h, obj_filepath, "villain2",player));
+                        else if (obj_name == "villain2"){
+                            //scene->AddEnemy(new Villian2(cache, x, y, w, h, obj_filepath, "villain2",player));
                         }
                     }
                 }

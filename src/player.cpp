@@ -18,11 +18,9 @@ Player::Player(SpriteCache * cache, int x, int y, int w, int h, string src){
     dead = false;
     moving = false;
 
-    sprites["up"];
-    sprites["left"];
-    sprites["right"];
-    sprites["down"];
-    state = "left";
+    sprites["right"] = new AnimatedSprite(cache, {0, 0, 16, 16}, d_rect, "resources/pacman_sprite.bmp", 16, 2, .06);
+    state = "right";
+    direction = state;
     
 }
 
@@ -51,13 +49,13 @@ void Player::Died(){
 void Player::Reset(){
     for (auto sprite : sprites){
         sprite.second->Reset();
-        state = "left";
-        SetPos(starting_xpos, starting_ypos);
-        lives = starting_life;
-        respawn_timer = 0.0;
-        
-        dead = false;
     }
+    state = "right";
+    SetPos(starting_xpos, starting_ypos);
+    lives = starting_life;
+    respawn_timer = 0.0;
+    
+    dead = false;
 }
 
 bool Player::TouchingEnemy(SDL_Rect * rect){

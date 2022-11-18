@@ -3,7 +3,7 @@
 LevelScene::LevelScene(SDL_Renderer * r, Framebuffer * framebuffer, SpriteCache * sprite_cache, TextCache * text_cache){
     this->framebuffer = framebuffer;
     starting = true;
-    running = true;  //dont forget to turn this back off.  True only for Testing purposes
+    running = false;  //dont forget to turn this back off.  True only for Testing purposes
     finished = false;
     paused = false;
     renderer = r;
@@ -24,6 +24,10 @@ void LevelScene::Reset(){
 }
 
 void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager * mouse, string * state, int width, int height, string * gender){
+    if (starting){
+        running = true;
+    }
+
     if (running){
         if (keyboard->KeyWasPressed(SDL_SCANCODE_P)){
             if (paused){
@@ -46,6 +50,8 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
             else if (keyboard->KeyIsPressed(SDL_SCANCODE_S)){
                 player->Move("down");
             }
+
+            player->Process(clock);
         }
         
     }
@@ -60,6 +66,8 @@ LevelScene::~LevelScene(){}
 void LevelScene::RenderScene(){
     framebuffer->SetActiveBuffer("GAME");
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
+    player->Render();
 
     framebuffer->UnsetBuffers();
 }
@@ -106,6 +114,8 @@ bool MenuScene::Process(Clock * clock, MouseManager * mouse, string * state, str
                 *gender = "boy";
                 *state = "GAME";
                 *path = "resources/level/pacman_level.mx";
+                select_newgame = false;
+                seconds_passed = 0;
                 return 1;
                 
 
@@ -115,6 +125,8 @@ bool MenuScene::Process(Clock * clock, MouseManager * mouse, string * state, str
                 *gender = "girl";
                 *state = "GAME";
                 *path = "resources/level/pacman_level.mx";
+                select_newgame = false;
+                seconds_passed = 0;
                 return 1;
                 
             }
