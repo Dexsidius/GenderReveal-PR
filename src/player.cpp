@@ -65,7 +65,10 @@ void Player::Reset(){
 }
 
 bool Player::CollisionCheck(SDL_Rect * rect){
-    cout << "touched" << endl;
+    return SDL_HasIntersection(&d_rect, rect);
+}
+
+bool Player::EatingPellet(SDL_Rect * rect){
     return SDL_HasIntersection(&d_rect, rect);
 }
 
@@ -99,6 +102,10 @@ void Player::Render(){
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     sprites[state]->Render();
+}
+
+void Player::AddPoints(int points_added){
+    points += points_added;
 }
 
 Player::~Player(){};

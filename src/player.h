@@ -15,7 +15,7 @@ class Player{
 
     public:
         string state;
-        int points;
+        int points = 0;
         SDL_Rect d_rect = {};
         double x_pos = 0, y_pos = 0;
         int starting_life = 3;
@@ -33,8 +33,10 @@ class Player{
         void Render();
         void SetPos(int x, int y);
         void Reset();
-        bool CollisionCheck(SDL_Rect * rect);
         void Died();
+        void AddPoints(int points_added);
+        bool CollisionCheck(SDL_Rect * rect);
+        bool EatingPellet(SDL_Rect * rect);
         
         
         ~Player();

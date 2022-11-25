@@ -15,7 +15,6 @@ class Ghost{
         SpriteCache * cache;
 
     public:
-    vector<int> erased;
     string type;
     string state;
     SDL_Rect d_rect = {};

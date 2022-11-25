@@ -74,6 +74,12 @@ LevelScene * CreateScene(SpriteCache * cache,Framebuffer * framebuffer, TextCach
                         else if (obj_name == "wall"){
                             scene->walls.push_back(new Sprite(cache, {0, 0, 32, 32}, {x, y, w, h}, obj_filepath));
                         }
+                        else if (obj_name == "pellet"){
+                            scene->pellets.push_back(new Sprite(cache, {0, 0}, {x, y, w, h}, obj_filepath));
+                        }
+                        else if (obj_name == "big_pellet"){
+                            scene->big_pellets.push_back(new Sprite(cache, {0, 0}, {x, y, w, h}, obj_filepath));
+                        }
                     }
                 }
             }

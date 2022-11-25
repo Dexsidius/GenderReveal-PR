@@ -24,10 +24,17 @@ class LevelScene {
         bool finished;
         bool starting;
         bool running;
+        bool win = false;
 
-        vector<Pellets *> pellets;
+        vector<Sprite *> pellets;
+        vector<Sprite *> big_pellets;
         vector<Sprite *> walls;
-        Sprite * map;
+        
+        map<string, Ghost *> ghosts;
+        Sprite * level;
+
+        int total_pellets;
+        int pellets_collected = 0;
 
 
         LevelScene(SDL_Renderer *, Framebuffer *, SpriteCache *, TextCache *);

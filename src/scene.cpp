@@ -25,6 +25,7 @@ void LevelScene::Reset(){
 
 void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager * mouse, string * state, int width, int height, string * gender){
     if (starting){
+        total_pellets = pellets.size() + big_pellets.size();
         running = true;
     }
 
@@ -57,11 +58,33 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
                 }
             }
 
+            // Player Goes through tunnel and appears on the other end
             if (player->d_rect.x < -32 ){
-                player->SetPos(800, player->y_pos);
+                player->SetPos(width, player->y_pos);
             }
             else if (player->d_rect.x > 832){
                 player->SetPos(-1, player->y_pos);
+            }
+
+            // Pellet Relocation instead of deleting
+            for (auto const &pellet : pellets){
+                if (player->EatingPellet(&pellet->d_rect)){
+                    pellet->SetPos(-1, -1);
+                    player->AddPoints(25);
+                    pellets_collected +=1;
+                }
+            }
+            
+            for (auto const &big_pellet : big_pellets){
+                if (player->EatingPellet(&big_pellet->d_rect)){
+                    big_pellet->SetPos(-1, -1);
+                    player->AddPoints(50);
+                    pellets_collected += 1;
+                }
+            }
+
+            if (pellets_collected == total_pellets){
+                win = true;
             }
 
             player->Process(clock);
@@ -71,7 +94,8 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
     
 }
 
-void LevelScene::AddEnemy(Ghost * ghost){}
+void LevelScene::AddEnemy(Ghost * ghost){
+}
 
 LevelScene::~LevelScene(){}
 
@@ -84,7 +108,15 @@ void LevelScene::RenderScene(){
         wall->Render();
     }
     
-    map->Render();
+    level->Render();
+
+    for (auto const &pellet : pellets){
+        pellet->Render();
+    }
+    
+    for (auto const &big_pellet : big_pellets){
+        big_pellet->Render();
+    }
     player->Render();
 
 
@@ -92,7 +124,7 @@ void LevelScene::RenderScene(){
 }
 
 void LevelScene::SetBackground(SpriteCache * cache, int x, int y, int w, int h, string filepath){
-    this->map = new Sprite(cache, {0, 0}, {x, y, w, h}, filepath);
+    this->level = new Sprite(cache, {0, 0}, {x, y, w, h}, filepath);
 }
 
 MenuScene::MenuScene(SpriteCache * cache, Framebuffer * framebuffer, TextCache * text, Player * player){
