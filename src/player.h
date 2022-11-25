@@ -22,7 +22,7 @@ class Player{
         int lives = starting_life;
         double respawn_timer = 2;
         double power_timer = 5;
-        int speed;
+        int speed = 8;
         bool powered_up = false;
         
 
@@ -33,7 +33,7 @@ class Player{
         void Render();
         void SetPos(int x, int y);
         void Reset();
-        bool TouchingEnemy(SDL_Rect * rect);
+        bool CollisionCheck(SDL_Rect * rect);
         void Died();
         
         

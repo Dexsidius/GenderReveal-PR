@@ -9,14 +9,13 @@
 
 class LevelScene {
     private:
-        vector<Pellets *> pellets;
+        
         
         Player * player = nullptr;
         SpriteCache * cache;
         Framebuffer * framebuffer;
         SDL_Renderer * renderer;
         TextCache * text_renderer;
-        
         
 
         
@@ -26,6 +25,10 @@ class LevelScene {
         bool starting;
         bool running;
 
+        vector<Pellets *> pellets;
+        vector<Sprite *> walls;
+        Sprite * map;
+
 
         LevelScene(SDL_Renderer *, Framebuffer *, SpriteCache *, TextCache *);
         void Process(Clock *, KeyboardManager *, MouseManager *, string *, int, int, string *);
@@ -33,6 +36,7 @@ class LevelScene {
         ~LevelScene();
         void AddPlayer(Player *);
         void AddEnemy(Ghost * ghost);
+        void SetBackground(SpriteCache * cache, int x, int y, int w, int h, string filepath);
         void Reset();
 };
 

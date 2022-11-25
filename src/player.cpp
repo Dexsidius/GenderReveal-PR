@@ -18,9 +18,12 @@ Player::Player(SpriteCache * cache, int x, int y, int w, int h, string src){
     dead = false;
     moving = false;
 
-    sprites["right"] = new AnimatedSprite(cache, {0, 0, 16, 16}, d_rect, "resources/pacman_sprite.bmp", 16, 2, .06);
+    sprites["right"] = new AnimatedSprite(cache, {0, 0, 16, 16}, {x_pos, y_pos, d_rect.w, d_rect.h}, src, 16, 2, .06);
+    sprites["left"] = new AnimatedSprite(cache, {0, 16, 16, 16}, {x_pos, y_pos, d_rect.w, d_rect.h}, src, 16, 2, .06);
+    sprites["up"] = new AnimatedSprite(cache, {0, 32, 16, 16}, {x_pos, y_pos, d_rect.w, d_rect.h}, src, 16, 2, .06);
+    sprites["down"] = new AnimatedSprite(cache, {0, 48, 16, 16}, {x_pos, y_pos, d_rect.w, d_rect.h}, src, 16, 2, .06);
+
     state = "right";
-    direction = state;
     
 }
 
@@ -29,6 +32,7 @@ void Player::Process(Clock * clock){
         if (direction == "left"){
             x_pos -= ((speed * 10) * clock->delta_time_s);
         }
+        
         if (direction == "right"){
             x_pos += ((speed * 10) * clock->delta_time_s);
         }
@@ -38,6 +42,9 @@ void Player::Process(Clock * clock){
         if (direction == "down"){
             y_pos += ((speed * 10) * clock ->delta_time_s);
         }
+
+        state = direction;
+        sprites[state]->Animate(clock);
     }
 }
 
@@ -54,11 +61,11 @@ void Player::Reset(){
     SetPos(starting_xpos, starting_ypos);
     lives = starting_life;
     respawn_timer = 0.0;
-    
     dead = false;
 }
 
-bool Player::TouchingEnemy(SDL_Rect * rect){
+bool Player::CollisionCheck(SDL_Rect * rect){
+    cout << "touched" << endl;
     return SDL_HasIntersection(&d_rect, rect);
 }
 
@@ -91,7 +98,7 @@ void Player::Render(){
     sprites[state]->SetPos(x_pos, y_pos);
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-   sprites[state]->Render();
+    sprites[state]->Render();
 }
 
 Player::~Player(){};

@@ -1,4 +1,5 @@
 #include "scene.h"
+#include <SDL2/SDL_rect.h>
 
 LevelScene::LevelScene(SDL_Renderer * r, Framebuffer * framebuffer, SpriteCache * sprite_cache, TextCache * text_cache){
     this->framebuffer = framebuffer;
@@ -14,7 +15,6 @@ LevelScene::LevelScene(SDL_Renderer * r, Framebuffer * framebuffer, SpriteCache 
 
 void LevelScene::AddPlayer(Player * pl){
     player = pl;
-
 }
 
 void LevelScene::Reset(){
@@ -51,6 +51,19 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
                 player->Move("down");
             }
 
+            for(auto const &wall : walls){
+                if (player->CollisionCheck(&wall->d_rect)){
+                    player->Move("none");
+                }
+            }
+
+            if (player->d_rect.x < -32 ){
+                player->SetPos(800, player->y_pos);
+            }
+            else if (player->d_rect.x > 832){
+                player->SetPos(-1, player->y_pos);
+            }
+
             player->Process(clock);
         }
         
@@ -67,9 +80,19 @@ void LevelScene::RenderScene(){
     framebuffer->SetActiveBuffer("GAME");
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
+    for (auto const &wall : walls){
+        wall->Render();
+    }
+    
+    map->Render();
     player->Render();
 
+
     framebuffer->UnsetBuffers();
+}
+
+void LevelScene::SetBackground(SpriteCache * cache, int x, int y, int w, int h, string filepath){
+    this->map = new Sprite(cache, {0, 0}, {x, y, w, h}, filepath);
 }
 
 MenuScene::MenuScene(SpriteCache * cache, Framebuffer * framebuffer, TextCache * text, Player * player){
@@ -158,8 +181,6 @@ void MenuScene::RenderScene(){
     framebuffer->SetActiveBuffer("MENU");
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
-
-
     
 
     for (auto const &button : buttons){

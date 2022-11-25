@@ -56,11 +56,23 @@ LevelScene * CreateScene(SpriteCache * cache,Framebuffer * framebuffer, TextCach
 
                             scene->AddPlayer(player);
                         }
-                        else if (obj_name == "villain1"){
-                            //scene->AddEnemy(new Villian1(cache, x, y, w, h, obj_filepath, "villain1",player));
+                        else if (obj_name == "enemy1"){
+                            //scene->AddEnemy(new Blinky(cache, x, y, w, h, obj_filepath, "villain1",player));
                         }
-                        else if (obj_name == "villain2"){
-                            //scene->AddEnemy(new Villian2(cache, x, y, w, h, obj_filepath, "villain2",player));
+                        else if (obj_name == "enemy2"){
+                            //scene->AddEnemy(new Pinky(cache, x, y, w, h, obj_filepath, "villain2",player));
+                        }
+                        else if (obj_name == "enemy3"){
+                            //scene->AddEnemy(new Inky(cache, x, y, w, h, obj_filepath, "villain2",player));
+                        }
+                        else if (obj_name == "enemy4"){
+                            //scene->AddEnemy(new Clyde(cache, x, y, w, h, obj_filepath, "villain2",player));
+                        }
+                        else if (obj_name == "level"){
+                            scene->SetBackground(cache, x, y, w, h, obj_filepath);
+                        }
+                        else if (obj_name == "wall"){
+                            scene->walls.push_back(new Sprite(cache, {0, 0, 32, 32}, {x, y, w, h}, obj_filepath));
                         }
                     }
                 }
