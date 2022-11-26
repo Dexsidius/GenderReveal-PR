@@ -30,7 +30,7 @@ class LevelScene {
         vector<Sprite *> big_pellets;
         vector<Sprite *> walls;
         
-        map<string, Ghost *> ghosts;
+        vector<Ghost *> ghosts;
         Sprite * level;
 
         int total_pellets;

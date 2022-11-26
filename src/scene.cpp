@@ -58,7 +58,7 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
                 }
             }
 
-            // Player Goes through tunnel and appears on the other end
+            // Player goes through tunnel and appears on the other end
             if (player->d_rect.x < -32 ){
                 player->SetPos(width, player->y_pos);
             }
@@ -66,10 +66,10 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
                 player->SetPos(-1, player->y_pos);
             }
 
-            // Pellet Relocation instead of deleting
+            // Pellet relocation instead of deleting
             for (auto const &pellet : pellets){
                 if (player->EatingPellet(&pellet->d_rect)){
-                    pellet->SetPos(-1, -1);
+                    pellet->SetPos(-5, -5);
                     player->AddPoints(25);
                     pellets_collected +=1;
                 }
@@ -77,16 +77,21 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
             
             for (auto const &big_pellet : big_pellets){
                 if (player->EatingPellet(&big_pellet->d_rect)){
-                    big_pellet->SetPos(-1, -1);
+                    big_pellet->SetPos(-5, -5);
                     player->AddPoints(50);
                     pellets_collected += 1;
                 }
             }
-
+            
+            // Win Condition
             if (pellets_collected == total_pellets){
                 win = true;
             }
-
+            
+            for (auto const &ghost : ghosts){
+                ghost->Process(clock);
+            }
+            
             player->Process(clock);
         }
         
@@ -95,6 +100,7 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
 }
 
 void LevelScene::AddEnemy(Ghost * ghost){
+    ghosts.push_back(ghost);
 }
 
 LevelScene::~LevelScene(){}
@@ -117,8 +123,12 @@ void LevelScene::RenderScene(){
     for (auto const &big_pellet : big_pellets){
         big_pellet->Render();
     }
-    player->Render();
 
+    for (auto const &ghost: ghosts){
+        ghost->Render();
+    }
+
+    player->Render();
 
     framebuffer->UnsetBuffers();
 }
