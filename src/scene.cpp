@@ -52,8 +52,22 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
                 player->Move("down");
             }
 
+            // Wall Collision Correction
             for(auto const &wall : walls){
-                if (player->CollisionCheck(&wall->d_rect)){
+                if (player->CollisionCheck(&wall->d_rect, &player->hitboxes["left"])){
+                    player->SetPos(player->x_pos+1 , player->y_pos);
+                    player->Move("none");
+                }
+                if (player->CollisionCheck(&wall->d_rect, &player->hitboxes["right"])){
+                    player->SetPos(player->x_pos-1 , player->y_pos);
+                    player->Move("none");
+                }
+                if (player->CollisionCheck(&wall->d_rect, &player->hitboxes["up"])){
+                    player->SetPos(player->x_pos, player->y_pos - 1);
+                    player->Move("none");
+                }
+                if (player->CollisionCheck(&wall->d_rect, &player->hitboxes["down"])){
+                    player->SetPos(player->x_pos+1 , player->y_pos + 1);
                     player->Move("none");
                 }
             }
@@ -80,6 +94,7 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
                     big_pellet->SetPos(-5, -5);
                     player->AddPoints(50);
                     pellets_collected += 1;
+                    
                 }
             }
             
@@ -88,10 +103,20 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
                 win = true;
             }
             
+            // Ghost Loop Conditions
             for (auto const &ghost : ghosts){
                 ghost->Process(clock);
+
+                if (player->powered_up){
+                    if (player->TouchingEnemy(&ghost->d_rect)){
+                        ghost->eaten = true;
+                    }
+                }
+                else if (player->TouchingEnemy(&ghost->d_rect)){
+                    player->dead = true;
+                }
             }
-            
+
             player->Process(clock);
         }
         

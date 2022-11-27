@@ -27,10 +27,8 @@ Ghost::Ghost(SpriteCache * cache, int x, int y, int w, int h, string src, string
 void Ghost::Process(Clock * clock){
     sprites[state]->Animate(clock);
 
-    if (state == "DYING"){
-        if (sprites[state]->finished){
-            eaten = true;
-        }
+    if (player->powered_up){
+        state = "VULNERABLE";
     }
 }
 

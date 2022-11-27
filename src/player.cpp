@@ -23,6 +23,11 @@ Player::Player(SpriteCache * cache, int x, int y, int w, int h, string src){
     sprites["up"] = new AnimatedSprite(cache, {0, 32, 16, 16}, {x_pos, y_pos, d_rect.w, d_rect.h}, src, 16, 2, .06);
     sprites["down"] = new AnimatedSprite(cache, {0, 48, 16, 16}, {x_pos, y_pos, d_rect.w, d_rect.h}, src, 16, 2, .06);
 
+    hitboxes["left"] = {d_rect.x - 8, d_rect.y, d_rect.w, d_rect.h};
+    hitboxes["right"] = {d_rect.x + 8, d_rect.y, d_rect.w, d_rect.h};
+    hitboxes["up"] = {d_rect.x, d_rect.y + 8, d_rect.w, d_rect.h};
+    hitboxes["down"] = {d_rect.x, d_rect.y - 8, d_rect.w, d_rect.h};
+
     state = "right";
     
 }
@@ -64,7 +69,12 @@ void Player::Reset(){
     dead = false;
 }
 
-bool Player::CollisionCheck(SDL_Rect * rect){
+bool Player::CollisionCheck(SDL_Rect * rect, SDL_Rect * rectB){
+    return SDL_HasIntersection(&d_rect, rect); 
+
+}
+
+bool Player::TouchingEnemy(SDL_Rect * rect){
     return SDL_HasIntersection(&d_rect, rect);
 }
 
