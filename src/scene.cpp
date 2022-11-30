@@ -54,20 +54,24 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
 
             // Wall Collision Correction
             for(auto const &wall : walls){
-                if (player->CollisionCheck(&wall->d_rect, &player->hitboxes["left"])){
-                    player->SetPos(player->x_pos+1 , player->y_pos);
-                    player->Move("none");
-                }
                 if (player->CollisionCheck(&wall->d_rect, &player->hitboxes["right"])){
                     player->SetPos(player->x_pos-1 , player->y_pos);
+                    cout << "right touching" << endl;
+                    player->Move("none");
+                }
+                if (player->CollisionCheck(&wall->d_rect, &player->hitboxes["left"])){
+                    player->SetPos(player->x_pos+1 , player->y_pos);
+                    cout << "left" << endl;
                     player->Move("none");
                 }
                 if (player->CollisionCheck(&wall->d_rect, &player->hitboxes["up"])){
-                    player->SetPos(player->x_pos, player->y_pos - 1);
+                    player->SetPos(player->x_pos, player->y_pos +1 );
+                    cout << "up" << endl;
                     player->Move("none");
                 }
                 if (player->CollisionCheck(&wall->d_rect, &player->hitboxes["down"])){
-                    player->SetPos(player->x_pos+1 , player->y_pos + 1);
+                    player->SetPos(player->x_pos , player->y_pos - 1);
+                    cout << "down" << endl;
                     player->Move("none");
                 }
             }

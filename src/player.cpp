@@ -23,10 +23,10 @@ Player::Player(SpriteCache * cache, int x, int y, int w, int h, string src){
     sprites["up"] = new AnimatedSprite(cache, {0, 32, 16, 16}, {x_pos, y_pos, d_rect.w, d_rect.h}, src, 16, 2, .06);
     sprites["down"] = new AnimatedSprite(cache, {0, 48, 16, 16}, {x_pos, y_pos, d_rect.w, d_rect.h}, src, 16, 2, .06);
 
-    hitboxes["left"] = {d_rect.x - 8, d_rect.y, d_rect.w, d_rect.h};
-    hitboxes["right"] = {d_rect.x + 8, d_rect.y, d_rect.w, d_rect.h};
-    hitboxes["up"] = {d_rect.x, d_rect.y + 8, d_rect.w, d_rect.h};
-    hitboxes["down"] = {d_rect.x, d_rect.y - 8, d_rect.w, d_rect.h};
+    hitboxes["left"] = {d_rect.x, d_rect.y, 1, d_rect.h - 1};
+    hitboxes["right"] = {d_rect.x, d_rect.y, 1, d_rect.h - 1};
+    hitboxes["up"] = {d_rect.x, d_rect.y, d_rect.w - 1, 1};
+    hitboxes["down"] = {d_rect.x, d_rect.y, d_rect.w - 1, 1};
 
     state = "right";
     
@@ -36,18 +36,24 @@ void Player::Process(Clock * clock){
     if (moving){
         if (direction == "left"){
             x_pos -= ((speed * 10) * clock->delta_time_s);
+            hitboxes["left"].x = x_pos + 64;
         }
         
         if (direction == "right"){
             x_pos += ((speed * 10) * clock->delta_time_s);
+            hitboxes["right"].x = x_pos+10;
         }
         if (direction == "up"){
             y_pos -= ((speed * 10) * clock ->delta_time_s);
+            hitboxes["up"].y = y_pos +10;
         }
         if (direction == "down"){
             y_pos += ((speed * 10) * clock ->delta_time_s);
+            hitboxes["down"].y = y_pos+10;
         }
 
+        // TODO: Update Hitboxes x,y with every movement to track PacMan Collision
+        
         state = direction;
         sprites[state]->Animate(clock);
     }

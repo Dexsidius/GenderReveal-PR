@@ -68,25 +68,25 @@ Ghost::~Ghost(){}
 
 Blinky::Blinky(SpriteCache * cache, int x, int y, int w, int h, string src, string t, Player * player) 
 : Ghost(cache, x, y, w, h, src, t, player){
-    sprites["DEFAULT"] = new AnimatedSprite(cache, {0, 0, 16, 16}, {x, y, w, h}, src, 16, 8, .06);
+    sprites["DEFAULT"] = new AnimatedSprite(cache, {0, 0, 16, 16}, {x, y, w, h}, src, 16, 8, .2);
     state = "DEFAULT";
 
 }
 
 Pinky::Pinky(SpriteCache * cache, int x, int y, int w, int h, string src, string t, Player * player) 
 : Ghost(cache, x, y, w, h, src, t, player){
-    sprites["DEFAULT"] = new AnimatedSprite(cache, {0, 0, 16, 16}, {x, y, w, h}, src, 16, 8, .06);
+    sprites["DEFAULT"] = new AnimatedSprite(cache, {0, 0, 16, 16}, {x, y, w, h}, src, 16, 8, .2);
     state = "DEFAULT";
 }
 
 Inky::Inky(SpriteCache * cache, int x, int y, int w, int h, string src, string t, Player * player) 
 : Ghost(cache, x, y, w, h, src, t, player){
-    sprites["DEFAULT"] = new AnimatedSprite(cache, {0, 0, 16, 16}, {x, y, w, h}, src, 16, 8, .06);
+    sprites["DEFAULT"] = new AnimatedSprite(cache, {0, 0, 16, 16}, {x, y, w, h}, src, 16, 8, .2);
     state = "DEFAULT";
 }
 
 Clyde::Clyde(SpriteCache * cache, int x, int y, int w, int h, string src, string t, Player * player) 
 : Ghost(cache, x, y, w, h, src, t, player){
-    sprites["DEFAULT"] = new AnimatedSprite(cache, {0, 0, 16, 16}, {x, y, w, h}, src, 16, 8, .06);
+    sprites["DEFAULT"] = new AnimatedSprite(cache, {0, 0, 16, 16}, {x, y, w, h}, src, 16, 8, .2);
     state = "DEFAULT";
 }
