@@ -1,5 +1,6 @@
 #include "scene.h"
 #include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_surface.h>
 
 LevelScene::LevelScene(SDL_Renderer * r, Framebuffer * framebuffer, SpriteCache * sprite_cache, TextCache * text_cache){
     this->framebuffer = framebuffer;
@@ -26,6 +27,7 @@ void LevelScene::Reset(){
 void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager * mouse, string * state, int width, int height, string * gender){
     if (starting){
         total_pellets = pellets.size() + big_pellets.size();
+        
         running = true;
     }
 
@@ -54,26 +56,31 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
 
             // Wall Collision Correction
             for(auto const &wall : walls){
-                if (player->CollisionCheck(&wall->d_rect, &player->hitboxes["right"])){
-                    player->SetPos(player->x_pos-1 , player->y_pos);
+                player->offset_x = 0;
+                player->offset_y = 0;
+
+                if (player->CollisionCheck(&player->hitboxes["right"], &wall->d_rect)){
+                    player->offset_x = -player->speed;
                     cout << "right touching" << endl;
                     player->Move("none");
                 }
-                if (player->CollisionCheck(&wall->d_rect, &player->hitboxes["left"])){
-                    player->SetPos(player->x_pos+1 , player->y_pos);
+                if (player->CollisionCheck( &player->hitboxes["left"], &wall->d_rect)){
+                    player->offset_x = player->speed;
                     cout << "left" << endl;
                     player->Move("none");
                 }
-                if (player->CollisionCheck(&wall->d_rect, &player->hitboxes["up"])){
-                    player->SetPos(player->x_pos, player->y_pos +1 );
+                if (player->CollisionCheck( &player->hitboxes["up"], &wall->d_rect)){
+                    player->offset_y = -player->speed;
                     cout << "up" << endl;
                     player->Move("none");
                 }
-                if (player->CollisionCheck(&wall->d_rect, &player->hitboxes["down"])){
-                    player->SetPos(player->x_pos , player->y_pos - 1);
+                if (player->CollisionCheck( &player->hitboxes["down"], &wall->d_rect)){
+                    player->offset_y = player->speed;
                     cout << "down" << endl;
                     player->Move("none");
                 }
+                cout << player->offset_x << ", " << player->offset_y << endl;
+                player->SetPos(player->x_pos + player->offset_x, player->y_pos + player->offset_y);
             }
 
             // Player goes through tunnel and appears on the other end

@@ -23,10 +23,10 @@ Player::Player(SpriteCache * cache, int x, int y, int w, int h, string src){
     sprites["up"] = new AnimatedSprite(cache, {0, 32, 16, 16}, {x_pos, y_pos, d_rect.w, d_rect.h}, src, 16, 2, .06);
     sprites["down"] = new AnimatedSprite(cache, {0, 48, 16, 16}, {x_pos, y_pos, d_rect.w, d_rect.h}, src, 16, 2, .06);
 
-    hitboxes["left"] = {d_rect.x, d_rect.y, 1, d_rect.h - 1};
-    hitboxes["right"] = {d_rect.x, d_rect.y, 1, d_rect.h - 1};
-    hitboxes["up"] = {d_rect.x, d_rect.y, d_rect.w - 1, 1};
-    hitboxes["down"] = {d_rect.x, d_rect.y, d_rect.w - 1, 1};
+    hitboxes["left"] = {d_rect.x, d_rect.y, 1,  h};
+    hitboxes["right"] = {d_rect.x, d_rect.y, 1,  h};
+    hitboxes["up"] = {d_rect.x, d_rect.y, w, 1};
+    hitboxes["down"] = {d_rect.x, d_rect.y, w, 1};
 
     state = "right";
     
@@ -36,26 +36,26 @@ void Player::Process(Clock * clock){
     if (moving){
         if (direction == "left"){
             x_pos -= ((speed * 10) * clock->delta_time_s);
-            hitboxes["left"].x = x_pos + 64;
         }
         
         if (direction == "right"){
             x_pos += ((speed * 10) * clock->delta_time_s);
-            hitboxes["right"].x = x_pos+10;
         }
         if (direction == "up"){
             y_pos -= ((speed * 10) * clock ->delta_time_s);
-            hitboxes["up"].y = y_pos +10;
         }
         if (direction == "down"){
             y_pos += ((speed * 10) * clock ->delta_time_s);
-            hitboxes["down"].y = y_pos+10;
         }
 
         // TODO: Update Hitboxes x,y with every movement to track PacMan Collision
         
+
         state = direction;
         sprites[state]->Animate(clock);
+
+        cout << x_pos << ", " << y_pos << endl;
+        cout << hitboxes[state].x << ", " << hitboxes[state].y << endl;
     }
 }
 
@@ -76,7 +76,7 @@ void Player::Reset(){
 }
 
 bool Player::CollisionCheck(SDL_Rect * rect, SDL_Rect * rectB){
-    return SDL_HasIntersection(&d_rect, rect); 
+    return SDL_HasIntersection(rect, rectB); 
 
 }
 
@@ -105,6 +105,14 @@ void Player::SetPos(int x, int y){
     x_pos = x;
     y_pos = y;
     
+    hitboxes["left"].x = d_rect.x;
+    hitboxes["left"].y = d_rect.y;
+    hitboxes["right"].x = d_rect.x + 24;
+    hitboxes["right"].y = d_rect.y;
+    hitboxes["up"].x = d_rect.x;
+    hitboxes["up"].y = d_rect.y;
+    hitboxes["down"].x = d_rect.x;
+    hitboxes["down"].y = d_rect.y + 24;
 }
 
 void Player::Render(){
@@ -118,6 +126,11 @@ void Player::Render(){
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     sprites[state]->Render();
+
+    for (auto const &hitbox : hitboxes){
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        SDL_RenderFillRect(renderer, &hitbox.second);
+    }
 }
 
 void Player::AddPoints(int points_added){

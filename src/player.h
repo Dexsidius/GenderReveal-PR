@@ -26,6 +26,8 @@ class Player{
         int speed = 8;
         bool powered_up = false;
         bool dead;
+        int offset_x = 0;
+        int offset_y = 0;
         
 
         Player(SpriteCache * cache, int x, int y, int w, int h, string src);
