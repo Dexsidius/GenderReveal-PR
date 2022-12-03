@@ -59,15 +59,15 @@ LevelScene * CreateScene(SpriteCache * cache,Framebuffer * framebuffer, TextCach
                         else if (obj_name == "enemy1"){
                             scene->AddEnemy(new Blinky(cache, x, y, w, h, obj_filepath, "blinky",player));
                         }
-                        else if (obj_name == "enemy2"){
-                            scene->AddEnemy(new Pinky(cache, x, y, w, h, obj_filepath, "pinky",player));
-                        }
-                        else if (obj_name == "enemy3"){
-                            scene->AddEnemy(new Inky(cache, x, y, w, h, obj_filepath, "inky",player));
-                        }
-                        else if (obj_name == "enemy4"){
-                            scene->AddEnemy(new Clyde(cache, x, y, w, h, obj_filepath, "clyde",player));
-                        }
+                        //else if (obj_name == "enemy2"){
+                            //scene->AddEnemy(new Pinky(cache, x, y, w, h, obj_filepath, "pinky",player));
+                        //}
+                        //else if (obj_name == "enemy3"){
+                            //scene->AddEnemy(new Inky(cache, x, y, w, h, obj_filepath, "inky",player));
+                        //}
+                        //else if (obj_name == "enemy4"){
+                            //scene->AddEnemy(new Clyde(cache, x, y, w, h, obj_filepath, "clyde",player));
+                        //}
                         else if (obj_name == "level"){
                             scene->SetBackground(cache, x, y, w, h, obj_filepath);
                         }

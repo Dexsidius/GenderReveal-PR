@@ -5,6 +5,7 @@
 #include "framebuffer.h"
 #include "player.h"
 #include "sprites.h"
+#include <SDL2/SDL_video.h>
 
 class PacManGR {
 private:
@@ -17,11 +18,15 @@ private:
 
     int WIDTH = 1280, HEIGHT = 720;
     int GAME_WIDTH = 1280, GAME_HEIGHT = 720;
-    Uint32 WINDOW_FLAGS = SDL_WINDOW_SHOWN;
+    Uint32 WINDOW_FLAGS = SDL_WINDOW_RESIZABLE;
     Uint32 RENDERER_FLAGS = SDL_RENDERER_PRESENTVSYNC;
     string state = "MENU";
     string scene_path = "";
     string gender = "";
+    string gender_input;
+
+    bool its_boy = false;
+    bool its_girl = false;
 
     //Private Objects
 
@@ -31,6 +36,7 @@ private:
     SpriteCache * cache;
     MenuScene * menu;
     LevelScene * game_scene;
+    CutScene * cutscene;
     Player * p1;
     MouseManager * mouse;
     Framebuffer * framebuffer;

@@ -30,11 +30,13 @@ void LevelScene::Reset(){
 void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager * mouse, string * state, int width, int height, string * gender){
     if (starting){
         total_pellets = pellets.size() + big_pellets.size();
+        pellets_collected = pellets_collected;
         
         running = true;
     }
 
     if (running){
+        
         if (keyboard->KeyWasPressed(SDL_SCANCODE_P)){
             if (paused){
                 paused = false;
@@ -74,7 +76,7 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
                     player->Move("none");
                 }
                 if (player->CollisionCheck( &player->hitboxes["up"], &wall->d_rect)){
-                    player->offset_y = + 1;
+                    player->offset_y = 1;
                     player->Move("none");
                 }
                 if (player->CollisionCheck( &player->hitboxes["down"], &wall->d_rect)){
@@ -114,12 +116,14 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
             // Win Condition
             if (pellets_collected == total_pellets){
                 win = true;
+                *state = "CUTSCENE";
             }
             
             // Ghost Loop Conditions
-            ManageEnemies(clock, player);
+            ManageEnemies(clock, player, keyboard, mouse);
 
             player->Process(clock);
+
         }
         
     }
@@ -130,15 +134,57 @@ void LevelScene::AddEnemy(Ghost * ghost){
     ghosts.push_back(ghost);
 }
 
-void LevelScene::ManageEnemies(Clock * clock, Player * player){
-    for (auto const &ghost : ghosts){
-        ghost->Process(clock);
+void LevelScene::ManageEnemies(Clock * clock, Player * player, KeyboardManager * keyboard, MouseManager * mouse){
+    if (!paused){
+        for (auto const &ghost : ghosts){
+            ghost->Process(clock);
 
-        if (player->TouchingEnemy(&ghost->d_rect)){
-            if (player->powered_up){
-                ghost->eaten = true;
-            }else{
-                player->Died();
+            if (keyboard->KeyIsPressed(SDL_SCANCODE_LEFT)){
+                ghost->Move("left");
+            }
+            else if (keyboard->KeyIsPressed(SDL_SCANCODE_RIGHT)){
+                ghost->Move("right");
+            }
+            else if (keyboard->KeyIsPressed(SDL_SCANCODE_UP)){
+                ghost->Move("up");
+            }
+            else if (keyboard->KeyIsPressed(SDL_SCANCODE_DOWN)){
+                ghost->Move("down");
+            }
+
+
+            for(auto const &wall : walls){
+                ghost->offset_x = 0;
+                ghost->offset_y = 0;
+
+                if (ghost->CollisionCheck(&ghost->hitboxes["right"], &wall->d_rect)){
+                    ghost->offset_x = -1;
+                    ghost->Move("none");
+                }
+                if (ghost->CollisionCheck(&ghost->hitboxes["left"], &wall->d_rect)){
+                    ghost->offset_x = 1;
+                    ghost->Move("none");
+                }
+                if (ghost->CollisionCheck(&ghost->hitboxes["up"], &wall->d_rect)){
+                    ghost->offset_y = 1;
+                    ghost->Move("none");
+                }
+                if (ghost->CollisionCheck(&ghost->hitboxes["down"], &wall->d_rect)){
+                    ghost->offset_y = -1;
+                    ghost->Move("none");
+                }
+                ghost->SetPos(ghost->x_pos + ghost->offset_x, ghost->y_pos + ghost->offset_y);
+            }
+
+
+
+
+            if (player->TouchingEnemy(&ghost->d_rect)){
+                if (player->powered_up){
+                    ghost->eaten = true;
+                }else{
+                    player->Died();
+                }
             }
         }
     }
@@ -190,8 +236,6 @@ MenuScene::MenuScene(SpriteCache * cache, Framebuffer * framebuffer, TextCache *
 
     buttons["play"] = new SpriteButton(cache, "resources/play.bmp", 640, 360, 96, 64, {0, 0, 48, 32}, 2, 48, .06);
     buttons["quit"] = new SpriteButton(cache, "resources/quit.bmp", 640, 450, 96, 64, {0, 0, 48, 32}, 2, 48, .06);
-    gender_options["boy"] = new SpriteButton(cache, "resources/boy.bmp", 400, 300, 96, 48, {0, 0, 64, 24}, 2, 64, .08);
-    gender_options["girl"] = new SpriteButton(cache, "resources/girl.bmp", 900, 300, 96, 48, {0, 0, 64, 24}, 2, 64, .08);
     
 
     animate_interval = 1.2;
@@ -209,33 +253,11 @@ bool MenuScene::Process(Clock * clock, MouseManager * mouse, string * state, str
         
 
         if (select_newgame){
-            for (auto const &options : gender_options){
-                if (select_newgame){
-                    options.second->Process(clock);
-            }
-        }
-            if (gender_options["boy"]->MouseClicking(mouse)){
-                its_boy = true;
-                its_girl = false;
-                *gender = "boy";
-                *state = "GAME";
-                *path = "resources/level/pacman_level.mx";
-                select_newgame = false;
-                seconds_passed = 0;
-                return 1;
-                
+            *state = "GAME";
+            *path = "resources/level/pacman_level.mx";
+            seconds_passed = 0;
 
-            }else if (gender_options["girl"]->MouseClicking(mouse)){
-                its_girl = true;
-                its_boy = false;
-                *gender = "girl";
-                *state = "GAME";
-                *path = "resources/level/pacman_level.mx";
-                select_newgame = false;
-                seconds_passed = 0;
-                return 1;
-                
-            }
+            return 1;
 
         }
         
@@ -277,10 +299,63 @@ void MenuScene::RenderScene(){
         }
     }
 
-    
+    framebuffer->UnsetBuffers();
+}
 
+CutScene::CutScene(SpriteCache * cache, Framebuffer * framebuffer, TextCache * text){
+    this->cache = cache;
+    this->framebuffer = framebuffer;
+    this->text_renderer = text;
+
+    starting = true;
+    running = false;
+    finished = false;
+
+}
+
+bool CutScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager * mouse, string * state, string * gender){
+    if (starting){
+        controlled_actors["pacman"] = new AnimatedSprite(cache, {0, 0, 16, 16}, {0, 360, 64, 64}, "resources/pacman_sprite.bmp", 16, 2, .06);
+        controlled_actors["ms.pacman"] = new AnimatedSprite(cache, {0, 16, 18, 16}, {1344, 360, 64, 64}, "resources/mspacman_sprite.bmp", 16, 3, .06);
+        
+       running = true;
+    }
+
+    if (running){
+        starting = false;
+        
+
+        if (!SDL_HasIntersection(&controlled_actors["pacman"]->d_rect, &controlled_actors["ms.pacman"]->d_rect)){
+            controlled_actors["pacman"]->x += ((actor_speed * 10) * clock->delta_time_s);
+            controlled_actors["ms.pacman"]->x -= ((actor_speed * 5) * clock->delta_time_s);
+            for (auto const &actor: controlled_actors){
+                    actor.second->Animate(clock);
+                }
+            }else {
+                if (*gender == "boy"){
+                    controlled_actors["boy"] = new AnimatedSprite(cache, {0, 16, 16, 16}, {controlled_actors["ms.pacman"]->x, controlled_actors["ms.pacman"]->y + 100, 24, 24}, "resources/pacman_sprite.bmp", 16, 2, .06);
+                } 
+                else if (*gender == "girl"){
+                    controlled_actors["girl"] = new AnimatedSprite(cache, {0, 16, 18, 16}, {controlled_actors["ms.pacman"]->x, controlled_actors["ms.pacman"]->y + 100, 24, 24}, "resources/mspacman_sprite.bmp", 16, 3, .06);
+                }
+            }
+    }
     
+    
+}
+
+void CutScene::RenderScene(){
+
+    framebuffer->SetActiveBuffer("CUTSCENE");
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+
+    for (auto const &actor : controlled_actors){
+       actor.second->Render();
+    }
+
 
     framebuffer->UnsetBuffers();
+
 }
 

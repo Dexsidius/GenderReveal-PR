@@ -70,18 +70,20 @@ void Player::Process(Clock * clock){
 }
 
 void Player::Died(){
-    lives -= 1;
     state = "DYING";
+    Move(state);
+    Reset();
+    lives -= 1;
     dead = true;
 }
 
 void Player::Reset(){
     SetPos(starting_xpos, starting_ypos);
+    cout << starting_xpos << "\n" << starting_ypos << endl;
     for (auto sprite : sprites){
         sprite.second->Reset();
     }
     state = "DEFAULT";
-    lives = starting_life;
     respawn_timer = 3.0;
     dead = false;
 }
@@ -111,13 +113,9 @@ void Player::Move(string d){
 }
 
 void Player::SetPos(int x, int y){
-    starting_xpos = x;
-    starting_ypos = y;
     x_pos = x;
     y_pos = y;
     HitboxPositionUpdate();
-    
-    
 }
 
 void Player::Render(){
@@ -132,10 +130,10 @@ void Player::Render(){
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     sprites[state]->Render();
 
-    for (auto const &hitbox : hitboxes){
-        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-        SDL_RenderFillRect(renderer, &hitbox.second);
-    }
+    //for (auto const &hitbox : hitboxes){
+        //SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        //SDL_RenderFillRect(renderer, &hitbox.second);
+    //}
 }
 
 void Player::AddPoints(int points_added){

@@ -28,6 +28,8 @@ class Ghost{
         double cooldown_time = 5.0;
         bool eaten = false;
         int speed = 8;
+        int offset_x;
+        int offset_y;
         Player * player;
 
         Ghost(SpriteCache * cache, int x, int y, int w, int h, string src, string t, Player * player);
@@ -41,6 +43,7 @@ class Ghost{
         void PathFinding(Player * pl);
         void HitboxPositionUpdate();
         bool CheckMove(string direction, SDL_Rect * walls);
+        bool CollisionCheck(SDL_Rect * rect, SDL_Rect * rectB);
 
         virtual void Render();
         virtual ~Ghost();

@@ -58,16 +58,20 @@ void Ghost::Process(Clock * clock){
 
 void Ghost::PathFinding(Player * pl){}
 
+bool Ghost::CollisionCheck(SDL_Rect * rect, SDL_Rect * rectB){
+    return SDL_HasIntersection(rect, rectB); 
+
+}
 
 void Ghost::HitboxPositionUpdate(){
     hitboxes["left"].x = d_rect.x;
     hitboxes["left"].y = d_rect.y;
-    hitboxes["right"].x = d_rect.x + 24;
+    hitboxes["right"].x = d_rect.x + 32;
     hitboxes["right"].y = d_rect.y;
     hitboxes["up"].x = d_rect.x;
     hitboxes["up"].y = d_rect.y;
     hitboxes["down"].x = d_rect.x;
-    hitboxes["down"].y = d_rect.y+24;
+    hitboxes["down"].y = d_rect.y+32;
 
 }
 
@@ -79,7 +83,6 @@ void Ghost::Move(string d){
         moving = true;
         direction = d;
     }
-
 }
 
 void Ghost::Reset(){

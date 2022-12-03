@@ -7,6 +7,30 @@
 #include "framebuffer.h"
 #include "enemy.h"
 
+
+class CutScene {
+    private:
+        SpriteCache * cache;
+        Framebuffer * framebuffer;
+        SDL_Renderer * renderer;
+        TextCache * text_renderer;
+
+    public:
+        bool starting;
+        bool finished;
+        bool running;
+        bool end;
+        
+        int actor_speed = 16;
+
+        map<string, Sprite *> controlled_actors = {};
+
+        CutScene(SpriteCache * cache, Framebuffer * framebuffer, TextCache * text);
+        ~CutScene();
+        bool Process(Clock * clock, KeyboardManager * keyboard, MouseManager * mouse, string * state, string * gender);
+        void RenderScene();
+};
+
 class LevelScene {
     private:
         
@@ -43,7 +67,7 @@ class LevelScene {
         ~LevelScene();
         void AddPlayer(Player *);
         void AddEnemy(Ghost * ghost);
-        void ManageEnemies(Clock * clock, Player * player);
+        void ManageEnemies(Clock * clock, Player * player, KeyboardManager * keyboard, MouseManager * mouse);
         void SetBackground(SpriteCache * cache, int x, int y, int w, int h, string filepath);
         void Reset();
 };
