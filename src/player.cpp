@@ -37,20 +37,20 @@ void Player::Process(Clock * clock){
     if (moving){
         if (direction == "left"){
             x_pos -= ((speed * 10) * clock->delta_time_s);
-            HitboxPositionUpdate();
+            
         }
         
         if (direction == "right"){
             x_pos += ((speed * 10) * clock->delta_time_s);
-            HitboxPositionUpdate();
+            
         }
         if (direction == "up"){
             y_pos -= ((speed * 10) * clock ->delta_time_s);
-            HitboxPositionUpdate();
+            
         }
         if (direction == "down"){
             y_pos += ((speed * 10) * clock ->delta_time_s);
-            HitboxPositionUpdate();
+            
         }
 
         // TODO: Update Hitboxes x,y with every movement to track PacMan Collision
@@ -62,6 +62,7 @@ void Player::Process(Clock * clock){
             }
         }
 
+        HitboxPositionUpdate();
         state = direction;
         sprites[state]->Animate(clock);
 
