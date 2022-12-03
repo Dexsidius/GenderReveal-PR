@@ -22,9 +22,9 @@ class Ghost{
         int default_speed = 0;
         bool stunned_cooldown;
         double cooldown_timer = 0.0;
-        double cooldown_time = 0.0;
+        double cooldown_time = 5.0;
         bool eaten = false;
-        int speed;
+        int speed = 8;
         Player * player;
 
         Ghost(SpriteCache * cache, int x, int y, int w, int h, string src, string t, Player * player);
@@ -35,7 +35,8 @@ class Ghost{
         void Reset();
         bool TouchingPlayer(SDL_Rect * rect);
         void Attack();
-        
+        void PathFinding(Player * pl);
+
         virtual void Render();
         virtual ~Ghost();
 };

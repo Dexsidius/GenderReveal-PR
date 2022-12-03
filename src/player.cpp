@@ -22,6 +22,7 @@ Player::Player(SpriteCache * cache, int x, int y, int w, int h, string src){
     sprites["left"] = new AnimatedSprite(cache, {0, 16, 16, 16}, {x_pos, y_pos, d_rect.w, d_rect.h}, src, 16, 2, .06);
     sprites["up"] = new AnimatedSprite(cache, {0, 32, 16, 16}, {x_pos, y_pos, d_rect.w, d_rect.h}, src, 16, 2, .06);
     sprites["down"] = new AnimatedSprite(cache, {0, 48, 16, 16}, {x_pos, y_pos, d_rect.w, d_rect.h}, src, 16, 2, .06);
+    sprites["DYING"] = new AnimatedSprite(cache, {0, 0, 16, 16}, {x_pos, y_pos, d_rect.w, d_rect.h}, "resources/dying_pacman.bmp", 16, 10, .06);
 
     hitboxes["left"] = {d_rect.x, d_rect.y, 1,  h};
     hitboxes["right"] = {d_rect.x, d_rect.y, 1,  h};
@@ -36,20 +37,30 @@ void Player::Process(Clock * clock){
     if (moving){
         if (direction == "left"){
             x_pos -= ((speed * 10) * clock->delta_time_s);
+            HitboxPositionUpdate();
         }
         
         if (direction == "right"){
             x_pos += ((speed * 10) * clock->delta_time_s);
+            HitboxPositionUpdate();
         }
         if (direction == "up"){
             y_pos -= ((speed * 10) * clock ->delta_time_s);
+            HitboxPositionUpdate();
         }
         if (direction == "down"){
             y_pos += ((speed * 10) * clock ->delta_time_s);
+            HitboxPositionUpdate();
         }
 
         // TODO: Update Hitboxes x,y with every movement to track PacMan Collision
-        
+        if (powered_up){
+            power_time += clock->delta_time_s;
+            if (power_time >= power_timer){
+                power_time = 0;
+                powered_up = false;
+            }
+        }
 
         state = direction;
         sprites[state]->Animate(clock);
@@ -62,6 +73,7 @@ void Player::Process(Clock * clock){
 void Player::Died(){
     lives -= 1;
     state = "DYING";
+    dead = true;
 }
 
 void Player::Reset(){
@@ -71,7 +83,7 @@ void Player::Reset(){
     state = "right";
     SetPos(starting_xpos, starting_ypos);
     lives = starting_life;
-    respawn_timer = 0.0;
+    respawn_timer = 3.0;
     dead = false;
 }
 
@@ -104,15 +116,9 @@ void Player::SetPos(int x, int y){
     starting_ypos = y;
     x_pos = x;
     y_pos = y;
+    HitboxPositionUpdate();
     
-    hitboxes["left"].x = d_rect.x;
-    hitboxes["left"].y = d_rect.y;
-    hitboxes["right"].x = d_rect.x + 24;
-    hitboxes["right"].y = d_rect.y;
-    hitboxes["up"].x = d_rect.x;
-    hitboxes["up"].y = d_rect.y;
-    hitboxes["down"].x = d_rect.x;
-    hitboxes["down"].y = d_rect.y + 24;
+    
 }
 
 void Player::Render(){
@@ -135,6 +141,18 @@ void Player::Render(){
 
 void Player::AddPoints(int points_added){
     points += points_added;
+}
+
+void Player::HitboxPositionUpdate(){
+    hitboxes["left"].x = d_rect.x;
+    hitboxes["left"].y = d_rect.y;
+    hitboxes["right"].x = d_rect.x + 24;
+    hitboxes["right"].y = d_rect.y;
+    hitboxes["up"].x = d_rect.x;
+    hitboxes["up"].y = d_rect.y;
+    hitboxes["down"].x = d_rect.x;
+    hitboxes["down"].y = d_rect.y+24;
+
 }
 
 Player::~Player(){};

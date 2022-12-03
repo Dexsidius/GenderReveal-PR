@@ -18,19 +18,37 @@ Ghost::Ghost(SpriteCache * cache, int x, int y, int w, int h, string src, string
     d_rect.h = h;
 
     sprites["DEFAULT"] = nullptr;
-    sprites["VULNERABLE"] = nullptr;
+    sprites["VULNERABLE"] = new AnimatedSprite(cache, {0, 0, 16, 16}, {x, y, w, h}, "resources/vulnerable_ghost.bmp", 16, 4, .2);
     state = "";
     default_speed = 9;
     speed = default_speed;
 }
 
 void Ghost::Process(Clock * clock){
+
+    if (direction == "left"){
+        x_pos -= ((speed * 10) * clock->delta_time_s);
+    }
+    if (direction == "right"){
+        x_pos += ((speed * 10) * clock->delta_time_s);
+    }
+    if (direction == "up"){
+        y_pos -= ((speed * 10) * clock->delta_time_s);
+    }
+    if (direction == "down"){
+        y_pos += ((speed * 10) * clock->delta_time_s);
+    }
+
     sprites[state]->Animate(clock);
 
     if (player->powered_up){
         state = "VULNERABLE";
+    }else{
+        state = "DEFAULT";
     }
 }
+
+void Ghost::PathFinding(Player * pl){}
 
 void Ghost::Move(string d){
 

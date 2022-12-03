@@ -53,6 +53,13 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
             else if (keyboard->KeyIsPressed(SDL_SCANCODE_S)){
                 player->Move("down");
             }
+            else if (keyboard->KeyIsPressed(SDL_SCANCODE_R)){
+                player->Reset();
+                
+                for (auto const ghost : ghosts){
+                    ghost->Reset();
+                }
+            }
 
             // Wall Collision Correction
             for(auto const &wall : walls){
@@ -60,26 +67,25 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
                 player->offset_y = 0;
 
                 if (player->CollisionCheck(&player->hitboxes["right"], &wall->d_rect)){
-                    player->offset_x = -player->speed;
+                    player->offset_x = -1;
                     cout << "right touching" << endl;
                     player->Move("none");
                 }
                 if (player->CollisionCheck( &player->hitboxes["left"], &wall->d_rect)){
-                    player->offset_x = player->speed;
+                    player->offset_x = 1;
                     cout << "left" << endl;
                     player->Move("none");
                 }
                 if (player->CollisionCheck( &player->hitboxes["up"], &wall->d_rect)){
-                    player->offset_y = -player->speed;
+                    player->offset_y = + 1;
                     cout << "up" << endl;
                     player->Move("none");
                 }
                 if (player->CollisionCheck( &player->hitboxes["down"], &wall->d_rect)){
-                    player->offset_y = player->speed;
+                    player->offset_y = -1;
                     cout << "down" << endl;
                     player->Move("none");
                 }
-                cout << player->offset_x << ", " << player->offset_y << endl;
                 player->SetPos(player->x_pos + player->offset_x, player->y_pos + player->offset_y);
             }
 
@@ -96,7 +102,7 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
                 if (player->EatingPellet(&pellet->d_rect)){
                     pellet->SetPos(-5, -5);
                     player->AddPoints(25);
-                    pellets_collected +=1;
+                    pellets_collected += 1;
                 }
             }
             
@@ -105,9 +111,12 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
                     big_pellet->SetPos(-5, -5);
                     player->AddPoints(50);
                     pellets_collected += 1;
+                    player->powered_up = true;
                     
                 }
             }
+
+            
             
             // Win Condition
             if (pellets_collected == total_pellets){
@@ -118,13 +127,13 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
             for (auto const &ghost : ghosts){
                 ghost->Process(clock);
 
-                if (player->powered_up){
-                    if (player->TouchingEnemy(&ghost->d_rect)){
+                if (player->TouchingEnemy(&ghost->d_rect)){
+                    if (player->powered_up){
                         ghost->eaten = true;
+                    }else{
+                        player->dead = true;
+                        player->lives -= 1;
                     }
-                }
-                else if (player->TouchingEnemy(&ghost->d_rect)){
-                    player->dead = true;
                 }
             }
 

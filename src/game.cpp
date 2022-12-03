@@ -41,7 +41,7 @@ int PacManGR::Start(int argc, char ** argv){
     framebuffer = new Framebuffer(window, renderer);
     text = new TextCache(renderer);
     cache = new SpriteCache(renderer);
-    p1 = new Player(cache, 0, 0, 24, 24, "resources/pacman_sprite.bmp");
+    p1 = new Player(cache, -24, -24, 24, 24, "resources/pacman_sprite.bmp");
 
     text->SetFont("joystix.ttf");
     menu = new MenuScene(cache, framebuffer, text, p1);

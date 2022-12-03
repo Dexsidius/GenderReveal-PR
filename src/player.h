@@ -22,8 +22,9 @@ class Player{
         int starting_life = 3;
         int lives = starting_life;
         double respawn_timer = 2;
-        double power_timer = 5;
-        int speed = 8;
+        double power_timer = 8;
+        double power_time = 0;
+        int speed = 16;
         bool powered_up = false;
         bool dead;
         int offset_x = 0;
@@ -42,7 +43,7 @@ class Player{
         bool CollisionCheck(SDL_Rect * rect, SDL_Rect * rectB);
         bool EatingPellet(SDL_Rect * rect);
         bool TouchingEnemy(SDL_Rect * rect);
-        
+        void HitboxPositionUpdate();
         
         ~Player();
 
