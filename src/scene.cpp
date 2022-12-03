@@ -20,6 +20,9 @@ void LevelScene::AddPlayer(Player * pl){
 
 void LevelScene::Reset(){
     player->Reset();
+    for (auto const &ghost : ghosts){
+        ghost->Reset();
+    }
     starting = true;
     running = false;
 }
@@ -54,11 +57,7 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
                 player->Move("down");
             }
             else if (keyboard->KeyIsPressed(SDL_SCANCODE_R)){
-                player->Reset();
-                
-                for (auto const ghost : ghosts){
-                    ghost->Reset();
-                }
+                Reset();
             }
 
             // Wall Collision Correction
@@ -68,32 +67,28 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
 
                 if (player->CollisionCheck(&player->hitboxes["right"], &wall->d_rect)){
                     player->offset_x = -1;
-                    cout << "right touching" << endl;
                     player->Move("none");
                 }
                 if (player->CollisionCheck( &player->hitboxes["left"], &wall->d_rect)){
                     player->offset_x = 1;
-                    cout << "left" << endl;
                     player->Move("none");
                 }
                 if (player->CollisionCheck( &player->hitboxes["up"], &wall->d_rect)){
                     player->offset_y = + 1;
-                    cout << "up" << endl;
                     player->Move("none");
                 }
                 if (player->CollisionCheck( &player->hitboxes["down"], &wall->d_rect)){
                     player->offset_y = -1;
-                    cout << "down" << endl;
                     player->Move("none");
                 }
                 player->SetPos(player->x_pos + player->offset_x, player->y_pos + player->offset_y);
             }
 
             // Player goes through tunnel and appears on the other end
-            if (player->d_rect.x < -32 ){
-                player->SetPos(width, player->y_pos);
+            if (player->hitboxes["right"].x < -32 ){
+                player->SetPos(760, player->y_pos);
             }
-            else if (player->d_rect.x > 832){
+            if (player->hitboxes["left"].x > 770){
                 player->SetPos(-1, player->y_pos);
             }
 
@@ -115,8 +110,6 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
                     
                 }
             }
-
-            
             
             // Win Condition
             if (pellets_collected == total_pellets){
@@ -124,18 +117,7 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
             }
             
             // Ghost Loop Conditions
-            for (auto const &ghost : ghosts){
-                ghost->Process(clock);
-
-                if (player->TouchingEnemy(&ghost->d_rect)){
-                    if (player->powered_up){
-                        ghost->eaten = true;
-                    }else{
-                        player->dead = true;
-                        player->lives -= 1;
-                    }
-                }
-            }
+            ManageEnemies(clock, player);
 
             player->Process(clock);
         }
@@ -146,6 +128,20 @@ void LevelScene::Process(Clock * clock, KeyboardManager * keyboard, MouseManager
 
 void LevelScene::AddEnemy(Ghost * ghost){
     ghosts.push_back(ghost);
+}
+
+void LevelScene::ManageEnemies(Clock * clock, Player * player){
+    for (auto const &ghost : ghosts){
+        ghost->Process(clock);
+
+        if (player->TouchingEnemy(&ghost->d_rect)){
+            if (player->powered_up){
+                ghost->eaten = true;
+            }else{
+                player->Died();
+            }
+        }
+    }
 }
 
 LevelScene::~LevelScene(){}

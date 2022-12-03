@@ -8,7 +8,7 @@
 *|level:resources/level.bmp:
 +|401-302-800-600,
 *|enemy1:resources/blinky.bmp:
-+|333-265-16-16,
++|373-225-16-16,
 *|enemy3:resources/inky.bmp:
 +|375-267-16-16,
 *|player:resources/player.bmp:

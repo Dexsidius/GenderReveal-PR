@@ -18,6 +18,7 @@ Player::Player(SpriteCache * cache, int x, int y, int w, int h, string src){
     dead = false;
     moving = false;
 
+    sprites["DEFAULT"] = new AnimatedSprite(cache, {0, 0, 16, 16}, {x_pos, y_pos, d_rect.w, d_rect.h}, src, 16, 2, .06);
     sprites["right"] = new AnimatedSprite(cache, {0, 0, 16, 16}, {x_pos, y_pos, d_rect.w, d_rect.h}, src, 16, 2, .06);
     sprites["left"] = new AnimatedSprite(cache, {0, 16, 16, 16}, {x_pos, y_pos, d_rect.w, d_rect.h}, src, 16, 2, .06);
     sprites["up"] = new AnimatedSprite(cache, {0, 32, 16, 16}, {x_pos, y_pos, d_rect.w, d_rect.h}, src, 16, 2, .06);
@@ -65,9 +66,6 @@ void Player::Process(Clock * clock){
         HitboxPositionUpdate();
         state = direction;
         sprites[state]->Animate(clock);
-
-        cout << x_pos << ", " << y_pos << endl;
-        cout << hitboxes[state].x << ", " << hitboxes[state].y << endl;
     }
 }
 
@@ -78,11 +76,11 @@ void Player::Died(){
 }
 
 void Player::Reset(){
+    SetPos(starting_xpos, starting_ypos);
     for (auto sprite : sprites){
         sprite.second->Reset();
     }
-    state = "right";
-    SetPos(starting_xpos, starting_ypos);
+    state = "DEFAULT";
     lives = starting_life;
     respawn_timer = 3.0;
     dead = false;
@@ -94,7 +92,7 @@ bool Player::CollisionCheck(SDL_Rect * rect, SDL_Rect * rectB){
 }
 
 bool Player::TouchingEnemy(SDL_Rect * rect){
-    return SDL_HasIntersection(&d_rect, rect);
+    return SDL_HasIntersection(rect, &d_rect);
 }
 
 bool Player::EatingPellet(SDL_Rect * rect){
@@ -147,12 +145,12 @@ void Player::AddPoints(int points_added){
 void Player::HitboxPositionUpdate(){
     hitboxes["left"].x = d_rect.x;
     hitboxes["left"].y = d_rect.y;
-    hitboxes["right"].x = d_rect.x + 24;
+    hitboxes["right"].x = d_rect.x + 32;
     hitboxes["right"].y = d_rect.y;
     hitboxes["up"].x = d_rect.x;
     hitboxes["up"].y = d_rect.y;
     hitboxes["down"].x = d_rect.x;
-    hitboxes["down"].y = d_rect.y+24;
+    hitboxes["down"].y = d_rect.y + 32;
 
 }
 

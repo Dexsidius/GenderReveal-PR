@@ -18,6 +18,9 @@ class Ghost{
         string type;
         string state;
         SDL_Rect d_rect = {};
+        map<string, SDL_Rect> hitboxes = {};
+        map<string, tuple<int, int>> possible_moves = {};
+
         double x_pos, y_pos;
         int default_speed = 0;
         bool stunned_cooldown;
@@ -36,6 +39,8 @@ class Ghost{
         bool TouchingPlayer(SDL_Rect * rect);
         void Attack();
         void PathFinding(Player * pl);
+        void HitboxPositionUpdate();
+        bool CheckMove(string direction, SDL_Rect * walls);
 
         virtual void Render();
         virtual ~Ghost();

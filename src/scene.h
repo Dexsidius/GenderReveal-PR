@@ -43,6 +43,7 @@ class LevelScene {
         ~LevelScene();
         void AddPlayer(Player *);
         void AddEnemy(Ghost * ghost);
+        void ManageEnemies(Clock * clock, Player * player);
         void SetBackground(SpriteCache * cache, int x, int y, int w, int h, string filepath);
         void Reset();
 };
